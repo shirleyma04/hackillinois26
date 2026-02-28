@@ -59,8 +59,8 @@ class OpenAIService:
             base_prompt += "Use formal business language. Be diplomatic and constructive.\n"
         elif tone == "intimidating":
             base_prompt += "Use VERY authoritative, commanding, and aggressive language. Be intimidating and forceful. Sound threatening and powerful. Make them feel the weight of your anger.\n"
-        elif tone == "shakespearean":
-            base_prompt += "Use Shakespearean English with 'thee', 'thou', 'dost', and archaic vocabulary.\n"
+        elif tone == "sarcastic":
+            base_prompt += "Use a sarcastic, mocking tone with subtle jabs and ironic observations. Sound dismissive and witty.\n"
         elif tone == "condescending":
             base_prompt += "Use a patronizing tone that talks down slightly, as if explaining to someone less informed.\n"
         elif tone == "disappointed":

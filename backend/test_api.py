@@ -45,11 +45,11 @@ tests = [
         }
     },
     {
-        "name": "Shakespearean",
+        "name": "Sarcastic",
         "data": {
             "message": "You borrowed my car and returned it empty!",
             "angry_at": "friend",
-            "tone": "shakespearean",
+            "tone": "sarcastic",
             "kindness_scale": 4,
             "format": "text",
             "profanity_check": "none"
