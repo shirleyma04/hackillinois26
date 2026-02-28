@@ -8,7 +8,7 @@ class TransformRequest(BaseModel):
     tone: Literal["professional", "intimidating", "shakespearean", "condescending", "disappointed"]
     kindness_scale: int = Field(ge=1, le=5)
     format: Literal["email", "text", "social_media", "review", "custom"]
-    profanity_check: Literal["check", "censored", "none"] = "check"
+    profanity_check: Literal["censored", "none"] = "censored"
 
 class TransformResponse(BaseModel):
     original_message: str
