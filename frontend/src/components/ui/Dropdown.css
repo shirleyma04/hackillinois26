@@ -5,31 +5,61 @@
 
 .dropdown-button {
   padding: 8px 12px;
+  font-family: var(--font-primary);
+  font-size: 1rem;
+  border: 2px solid var(--color-primary);
+  border-radius: var(--radius-md);
+  background: var(--color-primary);
+  color: var(--color-secondary);
   cursor: pointer;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  background: white;
+  width: 150px; /* or dynamic width */
+  display: flex;
+  justify-content: space-between; /* label left, caret right */
+  align-items: center;
+  outline: none;
+}
+
+.dropdown-button.default {
+  background-color: var(--color-primary);
+  color: var(--color-secondary);
+}
+
+.dropdown-button.chosen {
+  background-color: var(--color-secondary);
+  color: var(--color-primary);
+}
+
+.dropdown-button .caret {
+  margin-left: 8px;
+  font-size: 0.8rem;
+  transition: transform 0.2s ease;
+  background: var(--color-primary);
+}
+
+/* rotate caret when dropdown is open */
+.dropdown-button.open .caret {
+  transform: rotate(180deg);
 }
 
 .dropdown-menu {
   position: absolute;
   top: 100%;
   left: 0;
-  min-width: 150px;
-  border: 1px solid #ccc;
-  background: white;
+  color: var(--color-secondary);
+  border: 2.5px solid var(--color-primary);
+  border-radius: var(--radius-md);
+  min-width: 100%;
   z-index: 10;
-  border-radius: 6px;
+  margin-top: 4px;
 }
 
 .dropdown-item {
   padding: 8px;
   cursor: pointer;
-  transition: background-color 0.2s;
+  background: var(--color-primary);
 }
 
-/* Hover uses global primary color */
 .dropdown-item:hover {
-  background-color: var(--color-primary);
-  color: var(--color-secondary);
+  background: var(--color-secondary);
+  color: var(--color-primary);
 }

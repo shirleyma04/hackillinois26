@@ -1,28 +1,37 @@
 import { useState, useRef, useEffect } from "react";
 import "./Dropdown.css";
 
-function Dropdown({ label, options, onSelect }) {
+function Dropdown({ label: defaultLabel, options, onSelect }) {
   const [open, setOpen] = useState(false);
+  const [selected, setSelected] = useState(""); // track chosen option
   const dropdownRef = useRef(null);
 
   useEffect(() => {
-    function handleClickOutside(e) {
+    const handleClickOutside = (e) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
         setOpen(false);
       }
-    }
+    };
 
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  const handleSelect = (option) => {
+    setSelected(option);
+    onSelect(option);
+    setOpen(false);
+  };
+
   return (
     <div ref={dropdownRef} className="dropdown-container">
       <button
-        className="dropdown-button"
+        className={`dropdown-button ${open ? "open" : ""} ${
+          selected && selected !== defaultLabel ? "chosen" : "default"
+        }`}
         onClick={() => setOpen((prev) => !prev)}
       >
-        {label}
+        {selected || defaultLabel} <span className="caret">▼</span>
       </button>
 
       {open && (
@@ -31,10 +40,7 @@ function Dropdown({ label, options, onSelect }) {
             <div
               key={option}
               className="dropdown-item"
-              onClick={() => {
-                onSelect(option);
-                setOpen(false);
-              }}
+              onClick={() => handleSelect(option)}
             >
               {option}
             </div>
