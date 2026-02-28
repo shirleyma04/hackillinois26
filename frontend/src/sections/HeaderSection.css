@@ -8,7 +8,6 @@
 .logo-container {
   width: clamp(200px, 20vw, 400px); /* responsive width */
   height: auto; /* height adjusts with aspect ratio */
-  margin-bottom: var(--space-2xl);
 }
 
 .logo {

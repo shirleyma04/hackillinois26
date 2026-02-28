@@ -1,5 +1,6 @@
 .page-shell {
-  width: min(960px, 92%);
+  width: 50vw;
+  max-width: none;
   margin: 0 auto;
   padding: var(--space-xl) 0;
   display: grid;
@@ -9,7 +10,7 @@
 .page-shell > section,
 .page-shell > header,
 .page-shell > footer {
-  background: var(--bg-card);
+  background: var(--color-secondary);
   color: var(--text-primary);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-lg);
