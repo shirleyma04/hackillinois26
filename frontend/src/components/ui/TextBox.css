@@ -1,21 +1,27 @@
 .textbox {
   width: 100%;
-  min-height: 120px;
-  padding: 12px;
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
+  min-height: calc(1.2em * 2); /* start with 2 lines */
+  max-height: calc(1.2em * 6); /* grow up to 6 lines */
+  padding: var(--space-sm);
   font-family: var(--font-primary);
-  font-size: 16px;
-  color: var(--text-primary);
-  background-color: var(--bg-card);
-  resize: vertical;
-  outline: none;
+  font-size: 1rem;
+  line-height: 1.2em;
+  color: var(--text-primary); /* text color */
+  background-color: var(--bg-card); /* change background */
+  border: 2px solid var(--color-primary);
+  border-radius: var(--radius-md);
+  resize: none; /* prevent manual resize */
+  overflow-y: auto; /* scroll after 6 lines */
   transition:
-    border-color 0.2s,
-    box-shadow 0.2s;
+    height 0.1s ease-out,
+    border 0.2s ease,
+    background 0.2s ease;
+  outline: none; /* removes default focus outline */
 }
 
+/* Focus state */
 .textbox:focus {
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 2px var(--color-primary) 33;
+  border-color: var(--color-accent); /* keep border consistent */
+  box-shadow: none; /* remove browser glow/shadow */
+  outline: none; /* extra safety for focus outline */
 }

@@ -6,6 +6,7 @@ import StyleSection from "../sections/StyleSection";
 import TransformSection from "../sections/TransformSection";
 import OutputSection from "../sections/OutputSection";
 import FooterSection from "../sections/FooterSection";
+import "./CrashOutPage.css";
 
 function CrashOutPage() {
   return (
@@ -17,7 +18,7 @@ function CrashOutPage() {
       {/* <StyleSection /> */}
       {/* <TransformSection /> */}
       <OutputSection />
-      <FooterSection />
+      {/* <FooterSection /> */}
     </main>
   );
 }
