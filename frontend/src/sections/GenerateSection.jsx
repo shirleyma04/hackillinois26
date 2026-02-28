@@ -64,7 +64,9 @@ function GenerateSection() {
         onSelect={setVoice}
       />
 
-      <Button>Generate it!</Button>
+      <div style={{ marginTop: 12 }}>
+        <Button className="btn--match-dropdown">Generate it!</Button>
+      </div>
     </section>
   );
 }

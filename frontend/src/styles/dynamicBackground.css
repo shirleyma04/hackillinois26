@@ -1,73 +1,170 @@
 .dynbg {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  overflow: hidden;
+	position: fixed;
+	inset: 0;
+	z-index: 0;
+	pointer-events: none;
+	overflow: hidden;
 }
 
 .dynbg__gradient {
-  position: absolute;
-  inset: -20%;
-  background:
-    radial-gradient(circle at 20% 20%, var(--bg-start), transparent 55%),
-    radial-gradient(circle at 80% 30%, var(--bg-mid), transparent 55%),
-    radial-gradient(circle at 40% 80%, var(--bg-end), transparent 60%);
-  filter: blur(18px);
-  opacity: 0.9;
-  animation: bg-drift var(--bg-speed, 27s) ease-in-out infinite alternate;
+	position: absolute;
+	inset: -20%;
+	background:
+		radial-gradient(circle at 20% 20%, var(--bg-start), transparent 55%),
+		radial-gradient(circle at 80% 30%, var(--bg-mid), transparent 55%),
+		radial-gradient(circle at 40% 80%, var(--bg-end), transparent 60%);
+	filter: blur(18px);
+	opacity: 0.9;
+	animation: bg-drift var(--bg-speed, 27s) ease-in-out infinite alternate;
 }
 
 .dynbg__blob {
-  position: absolute;
-  width: 55vmax;
-  height: 55vmax;
-  border-radius: 999px;
-  filter: blur(40px);
-  opacity: 0.1;
-  background: var(--bg-end);
-  animation: blob-float 36s ease-in-out infinite alternate;
+	position: absolute;
+	width: 55vmax;
+	height: 55vmax;
+	border-radius: 999px;
+	filter: blur(40px);
+	opacity: 0.1;
+	background: var(--bg-end);
+	animation: blob-float 36s ease-in-out infinite alternate;
 }
 
 .dynbg__blob--a {
-  top: -20vmax;
-  left: -15vmax;
+	top: -20vmax;
+	left: -15vmax;
 }
 
 .dynbg__blob--b {
-  bottom: -25vmax;
-  right: -20vmax;
-  background: var(--bg-start);
-  animation-duration: 40s;
+	bottom: -25vmax;
+	right: -20vmax;
+	background: var(--bg-start);
+	animation-duration: 40s;
+}
+
+.bubble-layer {
+	position: absolute;
+	inset: 0;
+	pointer-events: none;
+	overflow: hidden;
+	z-index: 2;
+}
+
+.bubble {
+	position: absolute;
+	bottom: -40px;
+	border-radius: 999px;
+	background:
+		radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.35), transparent 60%),
+		var(--bubble-color);
+	filter: blur(0.2px);
+	animation-name: bubble-rise;
+	animation-duration: var(--bubble-duration, 5200ms);
+	animation-delay: var(--bubble-delay, 0ms);
+	animation-timing-function: ease-out;
+	animation-fill-mode: forwards;
 }
 
 @keyframes bg-drift {
-  0% {
-    transform: translate3d(-2%, -1%, 0) scale(1.05);
-  }
-  50% {
-    transform: translate3d(2%, 1%, 0) scale(1.1);
-  }
-  100% {
-    transform: translate3d(-1%, 2%, 0) scale(1.06);
-  }
+	0% {
+		transform: translate3d(-2%, -1%, 0) scale(1.05);
+	}
+	50% {
+		transform: translate3d(2%, 1%, 0) scale(1.1);
+	}
+	100% {
+		transform: translate3d(-1%, 2%, 0) scale(1.06);
+	}
 }
 
 @keyframes blob-float {
-  0% {
-    transform: translate3d(0, 0, 0) scale(1);
-  }
-  50% {
-    transform: translate3d(4%, -3%, 0) scale(1.05);
-  }
-  100% {
-    transform: translate3d(-3%, 4%, 0) scale(1.02);
-  }
+	0% {
+		transform: translate3d(0, 0, 0) scale(1);
+	}
+	50% {
+		transform: translate3d(4%, -3%, 0) scale(1.05);
+	}
+	100% {
+		transform: translate3d(-3%, 4%, 0) scale(1.02);
+	}
+}
+
+@keyframes bubble-rise {
+	0% {
+		transform: translate3d(0, 0, 0) scale(0.85);
+		opacity: 0;
+	}
+	12% {
+		opacity: inherit;
+	}
+	70% {
+		opacity: inherit;
+	}
+	100% {
+		transform: translate3d(var(--bubble-drift, 0px), -110vh, 0) scale(1.12);
+		opacity: 0;
+	}
+}
+
+.bgControl {
+	position: fixed;
+	top: 14px;
+	right: 14px;
+	z-index: 3;
+}
+
+.bgControl__trigger {
+	width: 38px;
+	height: 38px;
+	border-radius: 999px;
+	border: 1px solid var(--border-color);
+	background: var(--bg-card);
+	color: var(--text-primary);
+	cursor: pointer;
+}
+
+.bgControl__panel {
+	position: absolute;
+	top: 46px;
+	right: 0;
+	width: 250px;
+	border: 1px solid var(--border-color);
+	border-radius: 12px;
+	background: var(--bg-card);
+	color: var(--text-primary);
+	box-shadow: var(--shadow-medium);
+	padding: 12px;
+}
+
+.bgControl__title {
+	margin: 0 0 10px;
+	font-weight: 700;
+}
+
+.bgControl__row {
+	display: flex;
+	gap: 8px;
+	flex-wrap: wrap;
+}
+
+.bgControl__chip {
+	border: 1px solid var(--border-color);
+	background: color-mix(in srgb, var(--bg-card) 88%, var(--color-primary) 12%);
+	color: var(--text-primary);
+	border-radius: 999px;
+	padding: 6px 10px;
+	cursor: pointer;
+}
+
+.bgControl__hint {
+	margin: 10px 0 0;
+	font-size: 0.8rem;
+	color: var(--text-muted);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .dynbg__gradient,
-  .dynbg__blob {
-    animation: none !important;
-  }
+	.dynbg__gradient,
+	.dynbg__blob,
+	.bubble {
+		animation: none !important;
+	}
 }

@@ -1,8 +1,8 @@
 import "./Button.css";
 
-function Button({ children, ...props }) {
+function Button({ children, className = "", ...props }) {
   return (
-    <button className="btn" {...props}>
+    <button className={`btn ${className}`.trim()} {...props}>
       {children}
     </button>
   );
