@@ -122,3 +122,12 @@ class TransformResponse(BaseModel):
     original_message: str
     transformed_message: str
     profanity_detected: bool = False
+
+
+class MusicRequest(BaseModel):
+    prompt: str
+    duration_ms: int = 10000
+
+
+class MusicResponse(BaseModel):
+    file_path: str

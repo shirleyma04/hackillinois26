@@ -3,6 +3,7 @@ import Button from "../components/ui/Button.jsx";
 import TextBox from "../components/ui/Textbox.jsx";
 import TranscriptBox from "../components/ui/TranscriptBox.jsx";
 import "./InputSection.css";
+import InputTextArea from "../components/input/InputTextArea.jsx";
 
 function InputSection() {
   const [target, setTarget] = useState(null);
@@ -53,11 +54,14 @@ function InputSection() {
       </div>
 
       {mode === "write" && (
-        <TextBox
-          value={transcript}
-          onChange={setTranscript}
-          placeholder="Write your angry message..."
-        />
+        <div>
+          <TextBox
+            value={transcript}
+            onChange={setTranscript}
+            placeholder="Write your angry message..."
+          />
+          <InputTextArea/>
+        </div>
       )}
 
       {mode === "voice" && (
