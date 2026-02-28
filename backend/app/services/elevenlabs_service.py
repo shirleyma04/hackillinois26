@@ -180,3 +180,25 @@ def create_voice_from_preview(
 
     except Exception as e:
         raise Exception(f"Voice creation failed: {str(e)}")
+
+def create_composition_plan(prompt: str, duration_ms: int = 10000):
+    """
+    Generate a composition plan from a prompt.
+    """
+    plan = elevenlabs.music.composition_plan.create(
+        prompt=prompt,
+        music_length_ms=duration_ms,
+    )
+    return plan
+
+
+def generate_music_from_plan(composition_plan):
+    """
+    Generate music audio bytes from a composition plan.
+    """
+    audio_stream = elevenlabs.music.compose(
+        composition_plan=composition_plan,
+    )
+
+    audio_bytes = b"".join(audio_stream)
+    return audio_bytes
