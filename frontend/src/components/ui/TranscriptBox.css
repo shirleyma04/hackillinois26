@@ -1,14 +1,28 @@
 .transcript-box {
   width: 100%;
-  min-height: 100px;
-  padding: 12px;
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
+  min-height: calc(1.2em * 2); /* 2 lines */
+  max-height: calc(1.2em * 6); /* up to 6 lines */
+  padding: var(--space-sm);
   font-family: var(--font-primary);
-  font-size: 16px;
+  font-size: 1rem;
+  line-height: 1.2em;
   color: var(--text-primary);
   background-color: var(--bg-card);
+  border: 2px solid var(--color-primary);
+  border-radius: var(--radius-md);
+  overflow-y: auto; /* scroll if more than 6 lines */
+  transition:
+    height 0.1s ease-out,
+    border 0.2s ease,
+    background 0.2s ease;
+  outline: none;
   margin-top: 12px;
-  overflow-y: auto;
-  white-space: pre-wrap;
+  text-align: left;
+}
+
+/* optional focus style when updating text dynamically */
+.transcript-box:focus {
+  border-color: var(--color-accent);
+  box-shadow: none;
+  outline: none;
 }

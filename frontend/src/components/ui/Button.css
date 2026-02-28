@@ -1,0 +1,41 @@
+/* Base button styles */
+.btn {
+  padding: var(--space-sm) var(--space-md);
+  font-family: var(--font-primary);
+  font-size: 1rem;
+  border: 2.5px solid var(--color-primary);
+  border-radius: var(--radius-md);
+  background: var(--color-primary);
+  color: var(--color-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+
+  /* Remove browser highlights */
+  outline: none !important;
+  -webkit-tap-highlight-color: transparent;
+  appearance: none;
+  -webkit-appearance: none;
+  user-select: none;
+}
+
+/* Remove Firefox inner border */
+.btn::-moz-focus-inner {
+  border: 0;
+  padding: 0;
+}
+
+/* Hover / Active / Focus */
+.btn:hover,
+.btn:active,
+.btn:focus {
+  background-color: var(--color-secondary) !important;
+  color: var(--color-primary) !important;
+  box-shadow: none !important;
+  border: 2.5px solid var(--color-primary);
+}
+
+/* Disabled state */
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
