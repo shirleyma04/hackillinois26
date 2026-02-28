@@ -71,7 +71,7 @@ button {
   border: 1px solid transparent;
   padding: 0.55rem 1rem;
   background: var(--color-primary);
-  color: #f8fafc;
+  color: var(--text-inverse);
   cursor: pointer;
 }
 

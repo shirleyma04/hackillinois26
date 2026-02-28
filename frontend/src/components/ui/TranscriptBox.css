@@ -1,0 +1,14 @@
+.transcript-box {
+  width: 100%;
+  min-height: 100px;
+  padding: 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-family: var(--font-primary);
+  font-size: 16px;
+  color: var(--text-primary);
+  background-color: var(--bg-card);
+  margin-top: 12px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+}
