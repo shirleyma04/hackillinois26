@@ -72,8 +72,8 @@ def stitched_tts(
     combined_stream = BytesIO(b''.join(buffer.getvalue() for buffer in audio_buffers))
 
     # Generate a unique filename and save it to app/output/
-    os.makedirs("app/output", exist_ok=True)
-    save_file_path = f"app/output/{uuid.uuid4()}.mp3"
+    os.makedirs("app/tts_output", exist_ok=True)
+    save_file_path = f"app/tts_output/{uuid.uuid4()}.mp3"
     with open(save_file_path, "wb") as f:
         f.write(combined_stream.getbuffer())
 

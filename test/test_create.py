@@ -3,9 +3,9 @@ import requests
 API_URL = "http://127.0.0.1:8000/voices/design/create"
 
 payload = {
-    "voice_name": "High School Voice",
-    "voice_description": "Bubbly Valley Girl teen with a sing-songy, playful tone.",
-    "generated_voice_id": "SaxQmcnUVUYw2AfMaRkL"
+    "voice_name": "Corporate Executive",
+    "voice_description": "Authoritative corporate executive voice with confident and professional tone.",
+    "generated_voice_id": "cW9TKFZZUF6RNR1xt00R"
 }
 
 response = requests.post(API_URL, json=payload)
