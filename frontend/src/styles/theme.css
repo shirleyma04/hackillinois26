@@ -1,3 +1,72 @@
+/* =========================
+   FONT IMPORT
+========================= */
+
+@font-face {
+  font-family: 'Stoke';
+  src: url('/fonts/stoke-regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Stoke';
+  src: url('/fonts/stoke-light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+}
+
+/* =========================
+   LIGHT MODE (Default)
+========================= */
+
 :root {
-  --surface: #ffffff;
+  --color-primary: #721121;
+  --color-secondary: #f6d8ae;
+  --color-dark: #150808;
+  --color-muted: #7f7f7f;
+  --color-accent: #d97b49;
+
+  --bg-main: #f6d8ae;
+  --bg-card: #ffffff;
+  --bg-navbar: #ffffff;
+
+  --text-primary: #150808;
+  --text-secondary: #721121;
+  --text-muted: #7f7f7f;
+  --text-inverse: #ffffff;
+
+  --border-color: rgba(0, 0, 0, 0.08);
+
+  --shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-medium: 0 6px 18px rgba(0, 0, 0, 0.15);
+
+  --font-primary: 'Stoke', serif;
+  --font-secondary: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* =========================
+   DARK MODE
+========================= */
+
+[data-theme='dark'] {
+  --color-primary: #f6d8ae;
+  --color-secondary: #721121;
+  --color-dark: #0f0505;
+  --color-muted: #b5b5b5;
+  --color-accent: #d97b49;
+
+  --bg-main: #150808;
+  --bg-card: #1e0f0f;
+  --bg-navbar: #1a0c0c;
+
+  --text-primary: #f6d8ae;
+  --text-secondary: #d97b49;
+  --text-muted: #b5b5b5;
+  --text-inverse: #150808;
+
+  --border-color: rgba(255, 255, 255, 0.08);
+
+  --shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.4);
+  --shadow-medium: 0 6px 18px rgba(0, 0, 0, 0.6);
 }
