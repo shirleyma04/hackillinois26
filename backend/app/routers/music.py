@@ -11,7 +11,7 @@ import os
 
 router = APIRouter(prefix="/music", tags=["Music"])
 
-OUTPUT_DIR = "generated_music"
+OUTPUT_DIR = "app/generated_music"
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 
