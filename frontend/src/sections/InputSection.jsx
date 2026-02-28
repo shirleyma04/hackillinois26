@@ -3,6 +3,7 @@ import Button from "../components/ui/Button.jsx";
 import TextBox from "../components/ui/Textbox.jsx";
 import TranscriptBox from "../components/ui/TranscriptBox.jsx";
 import "./InputSection.css";
+import InputTextArea from "../components/input/InputTextArea.jsx";
 
 function InputSection() {
   const [target, setTarget] = useState(null);
@@ -45,6 +46,7 @@ function InputSection() {
             onChange={setTranscript}
             placeholder="Write your angry message..."
           />
+          <InputTextArea/>
         </div>
       )}
 
