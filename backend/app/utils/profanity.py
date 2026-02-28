@@ -1,0 +1,1 @@
+# SHARED - Profanity checking utilities
