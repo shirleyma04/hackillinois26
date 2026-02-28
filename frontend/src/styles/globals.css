@@ -119,3 +119,21 @@
   --shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.4);
   --shadow-medium: 0 6px 18px rgba(0, 0, 0, 0.6);
 }
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg-main);
+  color: var(--text-primary);
+  font-family: var(--font-secondary);
+}
+
+.appShell {
+  position: relative;
+  z-index: 1;
+}

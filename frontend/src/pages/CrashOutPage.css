@@ -1,3 +1,18 @@
-* {
-  background: var(--color-secondary);
+.page-shell {
+  width: min(960px, 92%);
+  margin: 0 auto;
+  padding: var(--space-xl) 0;
+  display: grid;
+  gap: var(--space-lg);
+}
+
+.page-shell > section,
+.page-shell > header,
+.page-shell > footer {
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+  padding: var(--space-lg);
 }

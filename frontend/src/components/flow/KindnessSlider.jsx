@@ -1,12 +1,18 @@
 import { useState } from "react";
 import "./KindnessSlider.css";
+import { useCrashOutStore } from "../../store/useCrashOutStore";
 
 function KindnessSlider({ value, onChange }) {
+  const kindness = useCrashOutStore((state) => state.kindness);
+  const setKindness = useCrashOutStore((state) => state.setKindness);
   const [sliderValue, setSliderValue] = useState(value || 3);
+
+  const resolvedValue = value ?? kindness ?? sliderValue;
 
   const handleChange = (e) => {
     const val = parseInt(e.target.value);
     setSliderValue(val);
+    setKindness(val);
     if (onChange) onChange(val);
   };
 
@@ -19,7 +25,7 @@ function KindnessSlider({ value, onChange }) {
         min="1"
         max="5"
         step="1"
-        value={sliderValue}
+        value={resolvedValue}
         onChange={handleChange}
         className="slider"
       />
