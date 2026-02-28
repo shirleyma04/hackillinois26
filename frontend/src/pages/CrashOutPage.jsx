@@ -10,16 +10,18 @@ import "./CrashOutPage.css";
 
 function CrashOutPage() {
   return (
-    <main className="page-shell">
+    <div>
       <HeaderSection />
-      {/* <TargetSection /> */}
-      <InputSection />
-      <GenerateSection />
-      {/* <StyleSection /> */}
-      {/* <TransformSection /> */}
-      <OutputSection />
-      {/* <FooterSection /> */}
-    </main>
+      <main className="page-shell">
+        {/* <TargetSection /> */}
+        <InputSection />
+        <GenerateSection />
+        {/* <StyleSection /> */}
+        {/* <TransformSection /> */}
+        <OutputSection />
+        {/* <FooterSection /> */}
+      </main>
+    </div>
   );
 }
 
