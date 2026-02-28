@@ -1,0 +1,139 @@
+/* =========================
+   GLOBAL VARIABLES & DYNAMIC SIZING
+========================= */
+
+/* Font Import */
+@font-face {
+  font-family: "Stoke";
+  src: url("/fonts/stoke-regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Stoke";
+  src: url("/fonts/stoke-light.ttf") format("truetype");
+  font-weight: 300;
+  font-style: normal;
+}
+
+/* =========================
+   LIGHT MODE (Default)
+========================= */
+:root {
+  /* Core Colors */
+  --color-primary: #721121;
+  --color-secondary: #f6d8ae;
+  --color-tertiary: #150808;
+  --color-quaternary: #fdfbf8;
+  --color-muted: #7f7f7f;
+  --color-accent: #d97b49;
+
+  /* Backgrounds */
+  --bg-main: #f6d8ae;
+  --bg-card: #ffffff;
+  --bg-navbar: #ffffff;
+
+  /* Text */
+  --text-primary: #150808;
+  --text-secondary: #721121;
+  --text-muted: #7f7f7f;
+  --text-inverse: #ffffff;
+
+  /* Borders & Shadows */
+  --border-color: rgba(0, 0, 0, 0.08);
+  --shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-medium: 0 6px 18px rgba(0, 0, 0, 0.15);
+
+  /* Typography */
+  --font-primary: "Stoke", serif;
+  --font-secondary: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-size-xs: 0.75rem; /* 12px */
+  --font-size-sm: 0.875rem; /* 14px */
+  --font-size-md: 1rem; /* 16px */
+  --font-size-lg: 1.25rem; /* 20px */
+  --font-size-xl: 1.5rem; /* 24px */
+  --font-size-2xl: 2rem; /* 32px */
+
+  /* Spacing System (dynamic with rems) */
+  --space-xxs: 0.25rem; /* 4px */
+  --space-xs: 0.5rem; /* 8px */
+  --space-sm: 0.75rem; /* 12px */
+  --space-md: 1rem; /* 16px */
+  --space-lg: 1.5rem; /* 24px */
+  --space-xl: 2rem; /* 32px */
+  --space-2xl: 3rem; /* 48px */
+  --space-3xl: 4rem; /* 64px */
+
+  /* Border Radius */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+
+  /* Dynamic Widths (responsive min/max) */
+  --width-xs: clamp(120px, 15%, 200px);
+  --width-sm: clamp(160px, 20%, 250px);
+  --width-md: clamp(200px, 30%, 350px);
+  --width-lg: clamp(250px, 40%, 500px);
+  --width-xl: clamp(300px, 60%, 700px);
+
+  /* Dynamic Heights (responsive min/max) */
+  --height-xs: clamp(32px, 2.5vw, 40px);
+  --height-sm: clamp(40px, 3vw, 56px);
+  --height-md: clamp(48px, 4vw, 72px);
+  --height-lg: clamp(64px, 5vw, 96px);
+  --height-xl: clamp(80px, 6vw, 140px);
+
+  /* Z-index */
+  --z-low: 10;
+  --z-medium: 50;
+  --z-high: 100;
+
+  /* Transition default */
+  --transition-fast: 0.2s ease-in-out;
+  --transition-medium: 0.4s ease-in-out;
+  --transition-slow: 0.6s ease-in-out;
+}
+
+/* =========================
+   DARK MODE
+========================= */
+[data-theme="dark"] {
+  --color-primary: #f6d8ae;
+  --color-secondary: #721121;
+  --color-tertiary: #fdfbf8;
+  --color-quaternary: #150808;
+  --color-muted: #b5b5b5;
+  --color-accent: #d97b49;
+
+  --bg-main: #150808;
+  --bg-card: #1e0f0f;
+  --bg-navbar: #1a0c0c;
+
+  --text-primary: #f6d8ae;
+  --text-secondary: #d97b49;
+  --text-muted: #b5b5b5;
+  --text-inverse: #150808;
+
+  --border-color: rgba(255, 255, 255, 0.08);
+  --shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.4);
+  --shadow-medium: 0 6px 18px rgba(0, 0, 0, 0.6);
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg-main);
+  color: var(--text-primary);
+  font-family: var(--font-secondary);
+}
+
+.appShell {
+  position: relative;
+  z-index: 1;
+}

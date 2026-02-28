@@ -1,0 +1,59 @@
+.button-group {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap; /* allows buttons to wrap to next line if needed */
+  gap: var(--space-sm); /* consistent spacing between buttons */
+  margin-bottom: var(--space-md); /* spacing below group */
+}
+
+.voice-container {
+  display: flex;
+  justify-content: center;
+}
+
+.transcript-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 800px;
+}
+
+.record-controls {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  display: flex;
+  gap: 10px;
+  z-index: 2;
+}
+
+.record-btn,
+.stop-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  background: var(--color-primary);
+  color: var(--color-secondary);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.stop-btn {
+  background: crimson;
+  color: white;
+}
+
+.record-btn:hover {
+  opacity: 0.9;
+}
+
+.stop-btn:hover {
+  opacity: 0.9;
+}
+
+.icon {
+  font-size: 0.9rem;
+}
