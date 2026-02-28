@@ -1,0 +1,91 @@
+.input-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center; /* centers the textbox horizontally */
+  gap: var(--space-sm); /* optional spacing between textbox and button */
+}
+
+.textbox {
+  width: 80%; /* fills the wrapper */
+  box-sizing: border-box;
+  min-height: calc(1.2em * 2); /* 2 lines start */
+  max-height: calc(1.2em * 6); /* grows to 6 lines */
+  padding: var(--space-sm);
+  font-family: var(--font-primary);
+  font-size: 1rem;
+  line-height: 1.2em;
+  color: var(--text-primary);
+  background-color: var(--bg-card);
+  border: 2px solid var(--color-primary);
+  border-radius: var(--radius-md);
+  resize: none;
+  overflow-y: auto;
+  transition:
+    height 0.1s ease-out,
+    border 0.2s ease,
+    background 0.2s ease;
+  outline: none;
+}
+
+.textbox:focus {
+  border-color: var(--color-accent);
+  box-shadow: none;
+}
+
+.speaking-button-wrapper {
+  width: 80%; /* match textbox width */
+  display: flex;
+  justify-content: flex-end; /* left-align the button relative to textbox */
+}
+
+.record-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* space between icon and text */
+  padding: 8px 12px;
+}
+
+/* Icon container */
+.record-icon {
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  position: relative;
+}
+
+/* Triangle play icon */
+.record-icon.play::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  border-left: 16px solid var(--color-primary);
+  border-top: 8px solid transparent;
+  border-bottom: 8px solid transparent;
+}
+
+/* Pause icon (2 vertical bars) */
+.record-icon.pause::before,
+.record-icon.pause::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  width: 6px;
+  height: 16px;
+  background-color: var(--color-primary);
+}
+
+.record-icon.pause::before {
+  left: 0;
+}
+
+.record-icon.pause::after {
+  right: 0;
+}
+
+.record-text {
+  font-size: 1rem;
+}

@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
+import "./InputTextArea.css";
+import Button from "../ui/Button.jsx";
 
 function InputTextArea() {
   const [text, setText] = useState("");
   const [listening, setListening] = useState(false);
   const recognitionRef = useRef(null);
-
-  // NEW: persistent transcript
   const finalTranscriptRef = useRef("");
+  const textareaRef = useRef(null);
 
   useEffect(() => {
     const SpeechRecognition =
@@ -45,6 +46,24 @@ function InputTextArea() {
     recognitionRef.current = recognition;
   }, []);
 
+  // 🔥 Auto-resize logic (2 → 6 lines max)
+  useEffect(() => {
+    if (textareaRef.current) {
+      const el = textareaRef.current;
+      el.style.height = "auto";
+
+      const lineHeight = parseInt(getComputedStyle(el).lineHeight);
+      const minHeight = lineHeight * 2;
+      const maxHeight = lineHeight * 6;
+
+      const newHeight = Math.min(el.scrollHeight, maxHeight);
+      el.style.height = Math.max(newHeight, minHeight) + "px";
+
+      // Enable scroll only after max height reached
+      el.style.overflowY = el.scrollHeight > maxHeight ? "auto" : "hidden";
+    }
+  }, [text]);
+
   const toggleListening = () => {
     if (!recognitionRef.current) return;
 
@@ -58,20 +77,29 @@ function InputTextArea() {
   };
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+    <div className="input-wrapper">
       <textarea
+        ref={textareaRef}
+        className="textbox"
         value={text}
         onChange={(e) => {
           setText(e.target.value);
-          finalTranscriptRef.current = e.target.value; // keep edits
+          finalTranscriptRef.current = e.target.value;
         }}
         placeholder="Type or speak your message..."
-        rows={5}
-        style={{ width: "100%", padding: "8px", fontSize: "16px" }}
+        rows={2}
       />
-      <button onClick={toggleListening} style={{ width: "150px", padding: "8px" }}>
-        {listening ? "Stop Listening" : "Start Speaking"}
-      </button>
+
+      <div className="speaking-button-wrapper">
+        <Button onClick={toggleListening} className="record-btn">
+          <span
+            className={`record-icon ${listening ? "pause" : "play"}`}
+          ></span>
+          <span className="record-text">
+            {listening ? "Stop Recording" : "Start Recording"}
+          </span>
+        </Button>
+      </div>
     </div>
   );
 }
