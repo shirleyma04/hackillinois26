@@ -1,0 +1,59 @@
+/* =========================
+   FONT IMPORT
+========================= */
+
+@font-face {
+  font-family: 'Stoke';
+  src: url('/fonts/stoke-regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Stoke';
+  src: url('/fonts/stoke-light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+}
+
+:root {
+  /* ===== Colors ===== */
+  --color-primary: #721121;      /* wine red */
+  --color-accent: #F6D8AE;       /* warm cream */
+  --color-dark: #172121;         /* deep dark */
+  --color-muted: #7F7F7F;        /* neutral gray */
+
+  --color-white: #ffffff;
+
+  /* ===== Backgrounds ===== */
+  --bg-main: var(--color-accent);
+  --bg-dark: var(--color-dark);
+  --bg-card: #ffffff;
+
+  /* ===== Text ===== */
+  --text-primary: var(--color-dark);
+  --text-light: #ffffff;
+  --text-muted: var(--color-muted);
+
+  /* ===== Spacing System (8px scale) ===== */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 48px;
+  --space-3xl: 64px;
+
+  /* ===== Border Radius ===== */
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+
+  /* ===== Shadows ===== */
+  --shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-medium: 0 6px 18px rgba(0, 0, 0, 0.15);
+
+  /* ===== Typography ===== */
+  --font-primary: 'Stoke', serif;
+  --font-secondary: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
