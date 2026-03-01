@@ -15,6 +15,7 @@ function GenerateSection() {
   const [customTone, setCustomTone] = useState("");
   const [customVoiceFormat, setCustomVoiceFormat] = useState("");
   const [customVoice, setCustomVoice] = useState("");
+  const [loading, setLoading] = useState(false);
 
   // Get state from Zustand store
   const message = useCrashOutStore((state) => state.message);
@@ -71,6 +72,7 @@ function GenerateSection() {
     }
 
     setError(null);
+    setLoading(true); // START loading
 
     try {
       const payload = {
@@ -97,6 +99,8 @@ function GenerateSection() {
     } catch (err) {
       console.error("TEXT - Transform error:", err);
       setError(err.message || "Failed to transform message");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -225,7 +229,9 @@ function GenerateSection() {
               onChange={(e) => setCustomTone(e.target.value)}
             />
           )}
-          <Button onClick={handleGenerateText}>Generate!</Button>
+          <Button onClick={handleGenerateText} disabled={loading}>
+            {loading ? "Generating..." : "Generate!"}
+          </Button>{" "}
           <Button className="back-button" onClick={handleBack}>
             ← Back to selection
           </Button>
@@ -280,7 +286,9 @@ function GenerateSection() {
               onChange={(e) => setCustomVoice(e.target.value)}
             />
           )}
-          <Button onClick={handleGenerateVoice}>Generate!</Button>
+          <Button onClick={handleGenerateVoice} disabled={loading}>
+            {loading ? "Generating..." : "Generate!"}
+          </Button>{" "}
           <Button className="back-button" onClick={handleBack}>
             ← Back
           </Button>
