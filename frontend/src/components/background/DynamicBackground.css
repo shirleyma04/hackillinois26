@@ -1,0 +1,87 @@
+/* Theme toggle slider */
+.theme-switch-wrapper {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+}
+
+.theme-slider {
+  position: relative;
+  display: inline-block;
+  width: 80px;
+  height: 36px;
+}
+
+.theme-slider input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider-track {
+  position: absolute;
+  cursor: pointer;
+  border-radius: 34px;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 10px;
+  transition: 0.4s;
+  background-color: #222; /* light beige for sun/light mode */
+}
+
+.slider-track .emoji {
+  font-size: 18px;
+  pointer-events: none;
+}
+
+.slider-track::before {
+  content: "";
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  left: 3px;
+  bottom: 2.5px;
+  background-color: #f5e8d0; /* knob default = white */
+  border-radius: 50%;
+  transition: 0.4s;
+  z-index: 1;
+}
+
+/* Move knob and change knob color when checked (light mode) */
+input:checked + .slider-track::before {
+  transform: translateX(44px);
+  background-color: #f5e8d0; /* still white for light mode */
+}
+
+/* Dark mode track and knob color */
+input:not(:checked) + .slider-track {
+  background-color: #f5e8d0; /* dark brown for moon/dark mode */
+}
+
+input:not(:checked) + .slider-track::before {
+  background-color: #222; /* knob dark in dark mode */
+}
+
+/* Background behind everything */
+.dynbg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1; /* behind all sections */
+  overflow: hidden;
+}
+
+.dynbg__gradient,
+.dynbg__blob {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
