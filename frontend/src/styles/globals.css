@@ -124,22 +124,22 @@
   --color-primary: #f6d8ae;
   --color-secondary: #721121;
   --color-tertiary: #fdfbf8;
-  --color-quaternary: #150808;
+  --color-quaternary: #2a1717;
   --color-muted: #b5b5b5;
   --color-accent: #d97b49;
 
-  --bg-main: #150808;
-  --bg-card: #1e0f0f;
-  --bg-navbar: #1a0c0c;
+  --bg-main: #2a1717;
+  --bg-card: #3a2323;
+  --bg-navbar: #311d1d;
 
-  --text-primary: #f6d8ae;
-  --text-secondary: #d97b49;
-  --text-muted: #b5b5b5;
-  --text-inverse: #150808;
+  --text-primary: #fff2df;
+  --text-secondary: #f2b38a;
+  --text-muted: #d9c8b2;
+  --text-inverse: #2a1717;
 
-  --border-color: rgba(255, 255, 255, 0.08);
-  --shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.4);
-  --shadow-medium: 0 6px 18px rgba(0, 0, 0, 0.6);
+  --border-color: rgba(255, 255, 255, 0.14);
+  --shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.3);
+  --shadow-medium: 0 6px 18px rgba(0, 0, 0, 0.45);
 }
 
 html,

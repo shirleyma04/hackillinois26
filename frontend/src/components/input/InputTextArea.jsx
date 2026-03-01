@@ -11,7 +11,7 @@ function InputTextArea() {
   const [recordedAudioUrl, setRecordedAudioUrl] = useState(null);
 
   const recognitionRef = useRef(null);
-  const finalTranscriptRef = useRef("");
+  const baseMessageRef = useRef("");
 
   const mediaRecorderRef = useRef(null);
   const currentChunksRef = useRef([]);
@@ -74,19 +74,24 @@ function InputTextArea() {
     recognition.lang = "en-US";
 
     recognition.onresult = (event) => {
+      let finalTranscript = "";
       let interimTranscript = "";
 
-      for (let index = event.resultIndex; index < event.results.length; index++) {
+      for (let index = 0; index < event.results.length; index++) {
         const transcriptChunk = event.results[index][0].transcript;
-
         if (event.results[index].isFinal) {
-          finalTranscriptRef.current += `${transcriptChunk} `;
+          finalTranscript += `${transcriptChunk} `;
         } else {
-          interimTranscript += transcriptChunk;
+          interimTranscript += `${transcriptChunk} `;
         }
       }
 
-      setMessage(finalTranscriptRef.current + interimTranscript);
+      const baseline = baseMessageRef.current ? `${baseMessageRef.current} ` : "";
+      const mergedMessage = `${baseline}${finalTranscript}${interimTranscript}`
+        .replace(/\s+/g, " ")
+        .trim();
+
+      setMessage(mergedMessage);
     };
 
     recognition.onerror = (event) => {
@@ -108,10 +113,6 @@ function InputTextArea() {
       }
     };
   }, [setMessage]);
-
-  useEffect(() => {
-    finalTranscriptRef.current = message;
-  }, [message]);
 
   useEffect(() => {
     if (!textareaRef.current) return;
@@ -155,6 +156,8 @@ function InputTextArea() {
     }
 
     try {
+      baseMessageRef.current = message.trim();
+
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       const preferredMimeType = getPreferredMimeType();
       const mediaRecorder = preferredMimeType
@@ -296,7 +299,9 @@ function InputTextArea() {
             value={message}
             onChange={(e) => {
               setMessage(e.target.value);
-              finalTranscriptRef.current = e.target.value;
+              if (!isSpeaking) {
+                baseMessageRef.current = e.target.value;
+              }
             }}
             placeholder="Type your message..."
             rows={2}

@@ -28,10 +28,27 @@
   margin-bottom: 10px;
   -webkit-appearance: none;
   appearance: none;
-  background: var(--border-color);
+  background: var(--track-bg, var(--border-color));
   height: 6px;
   border-radius: 3px;
   outline: none;
+}
+
+.kindnessSlider {
+  --track-bg: linear-gradient(
+    90deg,
+    color-mix(in oklab, var(--text-secondary) 25%, transparent) 0%,
+    color-mix(in oklab, var(--text-primary) 35%, transparent) 100%
+  );
+}
+
+[data-theme="dark"] .kindnessSlider {
+  --track-bg: linear-gradient(
+    90deg,
+    color-mix(in oklab, var(--bg-card) 75%, var(--text-secondary) 25%) 0%,
+    color-mix(in oklab, var(--bg-card) 65%, var(--text-secondary) 35%) 50%,
+    color-mix(in oklab, var(--bg-card) 40%, var(--text-primary) 60%) 100%
+  );
 }
 
 .slider::-webkit-slider-thumb {
@@ -59,12 +76,36 @@
   margin-top: -35px;
 }
 
+.kindnessLabels {
+  align-items: center;
+  margin-top: 8px;
+}
+
 .slider-end-labels .label:first-child {
   transform: translateX(-77px);
 }
 
 .slider-end-labels .label:last-child {
   transform: translateX(77px);
+}
+
+.kindnessLabel--meaner {
+  color: var(--text-secondary);
+}
+
+.kindnessLabel--nicer {
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .kindnessLabel--meaner {
+  color: var(--text-secondary);
+  opacity: 0.9;
+}
+
+[data-theme="dark"] .kindnessLabel--nicer {
+  color: var(--text-primary);
+  opacity: 1;
+  text-shadow: 0 0 10px color-mix(in oklab, var(--text-primary) 35%, transparent);
 }
 
 .kindness-readout {
@@ -75,6 +116,5 @@
 
 .label {
   font-size: 16px;
-  color: #000;
   text-align: center;
 }

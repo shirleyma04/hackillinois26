@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 
 const MAX_BUBBLES = 40;
 
-function BubbleLayer({ mood, burstSignal, palette = [] }) {
+function BubbleLayer({ mood, theme, intensity = 0.5, burstSignal, palette = [] }) {
 	const [bubbles, setBubbles] = useState([]);
 	const reducedMotionRef = useRef(false);
 
@@ -23,14 +23,19 @@ function BubbleLayer({ mood, burstSignal, palette = [] }) {
 			return;
 		}
 
+		const clampedIntensity = Math.max(0, Math.min(1, intensity));
+		const themeOpacityBoost = theme === "dark" ? 0.04 : 0;
+
 		const now = Date.now();
 		const nextBubbles = Array.from({ length: count }).map((_, index) => {
-			const duration = 4200 + Math.round(Math.random() * 2600);
+			const duration = Math.round(3600 + (1 - clampedIntensity) * 2800 + Math.random() * 900);
 			const x = Math.round(Math.random() * 100);
 			const size = 14 + Math.round(Math.random() * 34);
-			const opacity = Number((0.12 + Math.random() * 0.13).toFixed(2));
+			const opacity = Number(
+				(0.1 + clampedIntensity * 0.1 + themeOpacityBoost + Math.random() * 0.08).toFixed(2),
+			);
 			const color = palette[Math.floor(Math.random() * Math.max(1, palette.length))] || "var(--color-accent)";
-			const drift = -36 + Math.round(Math.random() * 72);
+			const drift = -28 + Math.round(Math.random() * (56 + clampedIntensity * 38));
 			const delay = Math.round(Math.random() * 220);
 			const id = `${now}-${currentMood}-${index}-${Math.random().toString(36).slice(2, 8)}`;
 
@@ -58,8 +63,11 @@ function BubbleLayer({ mood, burstSignal, palette = [] }) {
 		if (burstSignal <= 0) {
 			return;
 		}
-		spawnBubbles(mood, 6);
-	}, [burstSignal, mood]);
+		const bubbleCount = Math.round(
+			4 + Math.max(0, Math.min(1, intensity)) * 5 + (theme === "dark" ? 1 : 0),
+		);
+		spawnBubbles(mood, bubbleCount);
+	}, [burstSignal, mood, intensity, theme]);
 
 	return (
 		<div className="bubble-layer" aria-hidden="true">

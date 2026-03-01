@@ -1,5 +1,20 @@
 import { create } from "zustand";
 
+const getInitialTheme = () => {
+  if (typeof window === "undefined") {
+    return "light";
+  }
+
+  const storedTheme = window.localStorage.getItem("theme");
+  if (storedTheme === "light" || storedTheme === "dark") {
+    return storedTheme;
+  }
+
+  return window.matchMedia("(prefers-color-scheme: dark)").matches
+    ? "dark"
+    : "light";
+};
+
 export const useCrashOutStore = create((set) => ({
     // Input fields
     message: "",
@@ -7,6 +22,7 @@ export const useCrashOutStore = create((set) => ({
     tone: "",
     format: "",
     selectedFormat: "",
+    theme: getInitialTheme(),
     profanity_check: "censored",
     kindness: 3,
     kindnessRaw: 3,
@@ -33,6 +49,13 @@ export const useCrashOutStore = create((set) => ({
     setTone: (tone) => set({ tone }),
     setFormat: (format) => set({ format }),
     setSelectedFormat: (selectedFormat) => set({ selectedFormat }),
+    setTheme: (theme) =>
+      set(() => {
+        if (typeof window !== "undefined") {
+          window.localStorage.setItem("theme", theme);
+        }
+        return { theme };
+      }),
     setProfanityCheck: (profanity_check) => set({ profanity_check }),
     setKindness: (kindness) => {
       const numeric = Number(kindness);
@@ -57,8 +80,10 @@ export const useCrashOutStore = create((set) => ({
       tone: "",
       format: "",
       selectedFormat: "",
+      theme: getInitialTheme(),
       profanity_check: "censored",
       kindness: 3,
+      kindnessRaw: 3,
       transformedMessage: "",
       profanityDetected: false,
       isLoading: false,
