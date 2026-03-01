@@ -11,6 +11,10 @@ function GenerateSection() {
   const [toneLabel, setToneLabel] = useState("Select tone...");
   const [voiceFormat, setVoiceFormat] = useState("Select format...");
   const [voice, setVoice] = useState("Select voice...");
+  const [customTextFormat, setCustomTextFormat] = useState("");
+  const [customTone, setCustomTone] = useState("");
+  const [customVoiceFormat, setCustomVoiceFormat] = useState("");
+  const [customVoice, setCustomVoice] = useState("");
 
   // Get state from Zustand store
   const message = useCrashOutStore((state) => state.message);
@@ -190,6 +194,15 @@ function GenerateSection() {
             ]}
             onSelect={setTextFormat}
           />
+          {textFormat === "Custom..." && (
+            <input
+              className="custom-input"
+              type="text"
+              placeholder="Enter custom format..."
+              value={customTextFormat}
+              onChange={(e) => setCustomTextFormat(e.target.value)}
+            />
+          )}
           <h3>What should the message tone be?</h3>
           <Dropdown
             label={toneLabel}
@@ -203,6 +216,15 @@ function GenerateSection() {
             ]}
             onSelect={setToneLabel}
           />
+          {toneLabel === "Custom..." && (
+            <input
+              className="custom-input"
+              type="text"
+              placeholder="Enter custom tone..."
+              value={customTone}
+              onChange={(e) => setCustomTone(e.target.value)}
+            />
+          )}
           <Button onClick={handleGenerateText}>Generate!</Button>
           <Button className="back-button" onClick={handleBack}>
             ← Back to selection
@@ -227,6 +249,15 @@ function GenerateSection() {
             ]}
             onSelect={setVoiceFormat}
           />
+          {voiceFormat === "Custom..." && (
+            <input
+              className="custom-input"
+              type="text"
+              placeholder="Enter custom voice format..."
+              value={customVoiceFormat}
+              onChange={(e) => setCustomVoiceFormat(e.target.value)}
+            />
+          )}
           <h3>What should the voice be?</h3>
           <Dropdown
             label={voice}
@@ -240,6 +271,15 @@ function GenerateSection() {
             ]}
             onSelect={setVoice}
           />
+          {voice === "Custom..." && (
+            <input
+              className="custom-input"
+              type="text"
+              placeholder="Enter custom voice..."
+              value={customVoice}
+              onChange={(e) => setCustomVoice(e.target.value)}
+            />
+          )}
           <Button onClick={handleGenerateVoice}>Generate!</Button>
           <Button className="back-button" onClick={handleBack}>
             ← Back

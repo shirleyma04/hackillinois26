@@ -29,6 +29,37 @@
   width: 100%;
 }
 
+.custom-input {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 55%;
+  margin: 0 auto; /* this centers the element itself horizontally */
+  box-sizing: border-box;
+  min-height: calc(1.2em * 2);
+  max-height: calc(1.2em * 6);
+  padding: var(--space-sm);
+  font-family: var(--font-primary);
+  font-size: 1rem;
+  line-height: 1.2em;
+  color: var(--text-primary);
+  background-color: var(--bg-card);
+  border: 2px solid var(--color-primary);
+  border-radius: var(--radius-md);
+  resize: none;
+  overflow-y: auto;
+  transition:
+    height 0.1s ease-out,
+    border 0.2s ease,
+    background 0.2s ease;
+  outline: none;
+}
+
+.custom-input:focus {
+  border-color: var(--color-accent);
+  box-shadow: none;
+}
+
 .back-button {
   background-color: var(--color-secondary);
   color: var(--color-primary);
