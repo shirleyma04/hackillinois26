@@ -8,7 +8,7 @@ import "./GenerateSection.css";
 function GenerateSection() {
   const [mode, setMode] = useState(null); // "text", "voice", or null (initial)
   const [textFormat, setTextFormat] = useState("Select format...");
-  const [tone, setTone] = useState("Select tone...");
+  const [toneLabel, setToneLabel] = useState("Select tone...");
   const [voiceFormat, setVoiceFormat] = useState("Select format...");
   const [voice, setVoice] = useState("Select voice...");
 
@@ -16,7 +16,6 @@ function GenerateSection() {
   const message = useCrashOutStore((state) => state.message);
   const angry_at = useCrashOutStore((state) => state.angry_at);
   const kindness = useCrashOutStore((state) => state.kindness);
-  const error = useCrashOutStore((state) => state.error);
 
   // Get setters
   const setFormat = useCrashOutStore((state) => state.setFormat);
@@ -53,7 +52,7 @@ function GenerateSection() {
   // Handle TEXT generation
   const handleGenerateText = async () => {
     // Validation
-    if (!message || !angry_at || textFormat === "Select format..." || tone === "Select tone...") {
+    if (!message || !angry_at || textFormat === "Select format..." || toneLabel === "Select tone...") {
       setError("Please fill in all fields (message, target, format, tone)");
       return;
     }
@@ -64,7 +63,7 @@ function GenerateSection() {
       const payload = {
         message,
         angry_at,
-        tone: mapTone(tone),
+        tone: mapTone(toneLabel),
         format: mapFormat(textFormat),
         kindness_scale: kindness,
         profanity_check: "censored",
@@ -74,7 +73,7 @@ function GenerateSection() {
 
       // Store format and tone in global state
       setFormat(mapFormat(textFormat));
-      setTone(mapTone(tone));
+      setTone(mapTone(toneLabel));
 
       const result = await transformService(payload);
 
@@ -179,7 +178,7 @@ function GenerateSection() {
           />
           <h3>What should the message tone be?</h3>
           <Dropdown
-            label={tone}
+            label={toneLabel}
             options={[
               "Professional",
               "Intimidating",
@@ -188,7 +187,7 @@ function GenerateSection() {
               "Disappointed",
               "Custom...",
             ]}
-            onSelect={setTone}
+            onSelect={setToneLabel}
           />
           <Button onClick={handleGenerateText}>Generate!</Button>
         </div>
