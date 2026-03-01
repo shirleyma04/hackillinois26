@@ -4,18 +4,54 @@
 	z-index: 0;
 	pointer-events: none;
 	overflow: hidden;
+	--kindness-bg-mix: 50%;
+	--kindness-bg-shadow: 50%;
+	--dynbg-start: color-mix(
+		in oklab,
+		color-mix(in oklab, var(--bg-main) 62%, var(--color-tertiary) 38%) var(--kindness-bg-shadow),
+		color-mix(in oklab, var(--bg-main) 42%, var(--bg-card) 58%) var(--kindness-bg-mix)
+	);
+	--dynbg-mid: color-mix(
+		in oklab,
+		color-mix(in oklab, var(--bg-main) 58%, var(--color-accent) 42%) var(--kindness-bg-shadow),
+		color-mix(in oklab, var(--bg-card) 72%, var(--color-secondary) 28%) var(--kindness-bg-mix)
+	);
+	--dynbg-end: color-mix(
+		in oklab,
+		color-mix(in oklab, var(--bg-main) 76%, var(--color-primary) 24%) var(--kindness-bg-shadow),
+		color-mix(in oklab, var(--bg-card) 66%, var(--color-secondary) 34%) var(--kindness-bg-mix)
+	);
+}
+
+[data-theme="dark"] .dynbg {
+	--dynbg-start: color-mix(
+		in oklab,
+		color-mix(in oklab, var(--bg-main) 84%, var(--color-tertiary) 16%) var(--kindness-bg-shadow),
+		color-mix(in oklab, var(--bg-card) 58%, var(--color-secondary) 42%) var(--kindness-bg-mix)
+	);
+	--dynbg-mid: color-mix(
+		in oklab,
+		color-mix(in oklab, var(--bg-main) 80%, var(--color-primary) 20%) var(--kindness-bg-shadow),
+		color-mix(in oklab, var(--bg-card) 62%, var(--text-primary) 38%) var(--kindness-bg-mix)
+	);
+	--dynbg-end: color-mix(
+		in oklab,
+		color-mix(in oklab, var(--bg-main) 88%, var(--color-tertiary) 12%) var(--kindness-bg-shadow),
+		color-mix(in oklab, var(--bg-card) 68%, var(--text-primary) 32%) var(--kindness-bg-mix)
+	);
 }
 
 .dynbg__gradient {
 	position: absolute;
 	inset: -20%;
 	background:
-		radial-gradient(circle at 20% 20%, var(--bg-start), transparent 55%),
-		radial-gradient(circle at 80% 30%, var(--bg-mid), transparent 55%),
-		radial-gradient(circle at 40% 80%, var(--bg-end), transparent 60%);
-	filter: blur(18px);
-	opacity: 0.9;
+		radial-gradient(circle at 20% 20%, var(--dynbg-start), transparent 55%),
+		radial-gradient(circle at 80% 30%, var(--dynbg-mid), transparent 55%),
+		radial-gradient(circle at 40% 80%, var(--dynbg-end), transparent 60%);
+	filter: blur(var(--bg-blur, 18px));
+	opacity: var(--bg-gradient-opacity, 0.9);
 	animation: bg-drift var(--bg-speed, 27s) ease-in-out infinite alternate;
+	transition: background var(--transition-medium), filter var(--transition-medium), opacity var(--transition-medium);
 }
 
 .dynbg__blob {
@@ -24,9 +60,10 @@
 	height: 55vmax;
 	border-radius: 999px;
 	filter: blur(40px);
-	opacity: 0.1;
-	background: var(--bg-end);
+	opacity: var(--bg-blob-opacity, 0.1);
+	background: var(--dynbg-end);
 	animation: blob-float 36s ease-in-out infinite alternate;
+	transition: background var(--transition-medium), opacity var(--transition-medium);
 }
 
 .dynbg__blob--a {
@@ -37,7 +74,7 @@
 .dynbg__blob--b {
 	bottom: -25vmax;
 	right: -20vmax;
-	background: var(--bg-start);
+	background: var(--dynbg-start);
 	animation-duration: 40s;
 }
 
@@ -115,6 +152,12 @@
 .bgControl__trigger {
 	width: 38px;
 	height: 38px;
+	padding: 0;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	line-height: 1;
+	font-size: 16px;
 	border-radius: 999px;
 	border: 1px solid var(--border-color);
 	background: var(--bg-card);
@@ -155,10 +198,10 @@
 	cursor: pointer;
 }
 
-.bgControl__hint {
-	margin: 10px 0 0;
-	font-size: 0.8rem;
-	color: var(--text-muted);
+.bgControl__chip--active {
+	background: var(--color-primary);
+	color: var(--text-inverse);
+	border-color: var(--color-primary);
 }
 
 @media (prefers-reduced-motion: reduce) {

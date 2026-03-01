@@ -35,7 +35,7 @@ function KindnessSlider({ value, onChange }) {
   const moodEmoji = MOOD_EMOJIS[resolvedBucket] || MOOD_EMOJIS[3];
 
   return (
-    <div className="kindness-slider">
+    <div className="kindness-slider kindnessSlider">
       <div className="slider-wrap">
         <span className="emoji-thumb" style={{ left: `${thumbLeft}%` }} aria-hidden="true">
           {moodEmoji}
@@ -54,9 +54,9 @@ function KindnessSlider({ value, onChange }) {
 
       <div className="kindness-readout">Kindness: {resolvedBucket}/5</div>
 
-      <div className="slider-end-labels">
-        <span className="label">Make it meaner</span>
-        <span className="label">Make it nicer</span>
+      <div className="slider-end-labels kindnessLabels">
+        <span className="label kindnessLabel--meaner">Make it meaner</span>
+        <span className="label kindnessLabel--nicer">Make it nicer</span>
       </div>
     </div>
   );
