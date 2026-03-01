@@ -1,24 +1,13 @@
 import { useState, useEffect } from "react";
 import { useCrashOutStore } from "../store/useCrashOutStore";
-import { transformService } from "../services/transformService";
 import KindnessSlider from "../components/flow/KindnessSlider.jsx";
 import Button from "../components/ui/Button.jsx";
 
 function OutputSection() {
-  const message = useCrashOutStore((state) => state.message);
-  const angry_at = useCrashOutStore((state) => state.angry_at);
-  const tone = useCrashOutStore((state) => state.tone);
   const format = useCrashOutStore((state) => state.format);
   const selectedFormat = useCrashOutStore((state) => state.selectedFormat);
-  const kindness = useCrashOutStore((state) => state.kindness);
   const transformedMessage = useCrashOutStore(
     (state) => state.transformedMessage,
-  );
-  const setTransformedMessage = useCrashOutStore(
-    (state) => state.setTransformedMessage,
-  );
-  const setProfanityDetected = useCrashOutStore(
-    (state) => state.setProfanityDetected,
   );
   const [loading, setLoading] = useState(false);
   const [dots, setDots] = useState("");
@@ -36,32 +25,6 @@ function OutputSection() {
 
     return () => clearInterval(interval);
   }, [loading]);
-
-  const handleMakeChange = async () => {
-    if (!message || !angry_at || !tone || !format) return;
-    setLoading(true);
-    // setTransformedMessage("");
-
-    try {
-      const payload = {
-        message,
-        angry_at,
-        tone,
-        format,
-        kindness_scale: kindness,
-        profanity_check: "censored",
-      };
-
-      const result = await transformService(payload);
-      setTransformedMessage(result.transformed_message);
-      setProfanityDetected(result.profanity_detected);
-    } catch (err) {
-      console.error("Re-transform error:", err);
-      setTransformedMessage("Failed to generate message.");
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const handleCopy = async () => {
     if (!transformedMessage) return;
@@ -162,9 +125,6 @@ function OutputSection() {
           justifyContent: "center",
         }}
       >
-        <Button onClick={handleMakeChange} disabled={loading}>
-          Make the change
-        </Button>
         <Button onClick={handleSend} disabled={loading || !isEmailSend}>
           {isEmailSend ? "Send It" : "Send It — Coming Soon 🚀"}
         </Button>
