@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useCrashOutStore } from "../store/useCrashOutStore";
+import { transformService } from "../services/transformService";
 import KindnessSlider from "../components/flow/KindnessSlider.jsx";
 import Button from "../components/ui/Button.jsx";
 import "./OutputSection.css";
@@ -151,6 +152,7 @@ function OutputSection() {
       }
     } catch (err) {
       console.error("Re-transform error:", err);
+      console.error("here.")
       setTransformedMessage("Failed to generate message.");
     } finally {
       setLoading(false);

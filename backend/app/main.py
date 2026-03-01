@@ -5,6 +5,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.routers import transform, tts, voices, music
 from fastapi.staticfiles import StaticFiles
+from pathlib import Path
 
 app = FastAPI(
     title="Crash Out",
@@ -42,8 +43,14 @@ app.include_router(tts.router, tags=["voice"])
 app.include_router(voices.router, tags=["voice"])
 app.include_router(music.router, tags=["voice"])
 
-app.mount("/tts_output", StaticFiles(directory="app/tts_output"), name="tts_output")
+BASE_DIR = Path(__file__).resolve().parent
 
+app.mount("/tts_output", StaticFiles(directory="app/tts_output"), name="tts_output")
+app.mount(
+    "/generated_music",
+    StaticFiles(directory="app/generated_music"),
+    name="generated_music",
+)
 
 @app.get("/")
 async def root():
