@@ -19,6 +19,10 @@ export const useCrashOutStore = create((set) => ({
     isLoading: false,
     error: null,
 
+    // Add TTS file path
+    ttsFilePath: "",                  // <- new state
+    setTtsFilePath: (ttsFilePath) => set({ ttsFilePath }), // <- setter
+
     // Input setters
     setMessage: (message) => set({ message }),
     setAngryAt: (angry_at) => set({ angry_at }),
