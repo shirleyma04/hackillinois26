@@ -112,13 +112,13 @@ function GenerateSection() {
     setSelectedFormat(mapSelectedFormat(selected));
   };
 
-  const getFormatComingSoonMessage = () => {
-    if (textFormat === "Select format..." || textFormat === "Email") {
-      return null;
-    }
-    const label = textFormat === "Custom..." ? "Custom" : textFormat;
-    return `Feature to send '${label}' is coming soon... `;
-  };
+  // const getFormatComingSoonMessage = () => {
+  //   if (textFormat === "Select format..." || textFormat === "Email") {
+  //     return null;
+  //   }
+  //   const label = textFormat === "Custom..." ? "Custom" : textFormat;
+  //   return `Feature to send '${label}' is coming soon... `;
+  // };
 
   const flashError = (msg) => {
     setError(msg);
@@ -392,9 +392,9 @@ function GenerateSection() {
         <div className="generator-container fade-in">
           <h2>Generate A Text Message</h2>
           <h3>What should the message format be?</h3>
-          {getFormatComingSoonMessage() ? (
+          {/* {getFormatComingSoonMessage() ? (
             <p className="format-helper-text">{getFormatComingSoonMessage()}</p>
-          ) : null}
+          ) : null} */}
           <Dropdown
             label={textFormat}
             options={[
