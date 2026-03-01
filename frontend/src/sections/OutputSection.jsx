@@ -9,6 +9,7 @@ function OutputSection() {
   const angry_at = useCrashOutStore((state) => state.angry_at);
   const tone = useCrashOutStore((state) => state.tone);
   const format = useCrashOutStore((state) => state.format);
+  const selectedFormat = useCrashOutStore((state) => state.selectedFormat);
   const kindness = useCrashOutStore((state) => state.kindness);
   const transformedMessage = useCrashOutStore(
     (state) => state.transformedMessage,
@@ -21,6 +22,9 @@ function OutputSection() {
   );
   const [loading, setLoading] = useState(false);
   const [dots, setDots] = useState("");
+  const effectiveSelectedFormat =
+    selectedFormat || (format === "email" ? "email" : "");
+  const isEmailSend = effectiveSelectedFormat === "email";
 
   // Animate the dots while loading
   useEffect(() => {
@@ -69,12 +73,19 @@ function OutputSection() {
     }
   };
 
-  const handleSend = () => {
-    if (!transformedMessage) return;
+  const handleSend = async () => {
+    if (!transformedMessage || !isEmailSend) return;
 
-    const subject = "Message";
-    const body = encodeURIComponent(transformedMessage);
-    window.location.href = `mailto:?subject=${subject}&body=${body}`;
+    try {
+      setLoading(true);
+      const subject = "Message";
+      const body = encodeURIComponent(transformedMessage);
+      window.location.href = `mailto:?subject=${subject}&body=${body}`;
+    } catch (err) {
+      console.error("Send failed:", err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const ttsFilePath = useCrashOutStore((state) => state.ttsFilePath);
@@ -154,8 +165,8 @@ function OutputSection() {
         <Button onClick={handleMakeChange} disabled={loading}>
           Make the change
         </Button>
-        <Button onClick={handleSend} disabled={loading}>
-          Send it
+        <Button onClick={handleSend} disabled={loading || !isEmailSend}>
+          {isEmailSend ? "Send It" : "Send It — Coming Soon 🚀"}
         </Button>
         <Button onClick={handleCopy} disabled={loading}>
           Copy
