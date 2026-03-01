@@ -4,7 +4,6 @@ import InputSection from "../sections/InputSection";
 import GenerateSection from "../sections/GenerateSection";
 import StyleSection from "../sections/StyleSection";
 import TransformSection from "../sections/TransformSection";
-import OutputSection from "../sections/OutputSection";
 import FooterSection from "../sections/FooterSection";
 import "./CrashOutPage.css";
 
@@ -18,7 +17,6 @@ function CrashOutPage() {
         <GenerateSection />
         {/* <StyleSection /> */}
         {/* <TransformSection /> */}
-        <OutputSection />
         {/* <FooterSection /> */}
       </main>
     </div>

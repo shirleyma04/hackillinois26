@@ -2,44 +2,56 @@ import { useState } from "react";
 import "./KindnessSlider.css";
 import { useCrashOutStore } from "../../store/useCrashOutStore";
 
+const MOOD_EMOJIS = {
+  1: "😡",
+  2: "😠",
+  3: "😐",
+  4: "🙂",
+  5: "😊",
+};
+
 function KindnessSlider({ value, onChange }) {
   const kindness = useCrashOutStore((state) => state.kindness);
+  const kindnessRaw = useCrashOutStore((state) => state.kindnessRaw);
   const setKindness = useCrashOutStore((state) => state.setKindness);
   const [sliderValue, setSliderValue] = useState(value || 3);
 
-  const resolvedValue = value ?? kindness ?? sliderValue;
+  const resolvedRawValue = value ?? kindnessRaw ?? kindness ?? sliderValue;
+  const resolvedBucket = Math.min(5, Math.max(1, Math.round(resolvedRawValue)));
 
   const handleChange = (e) => {
-    const val = parseInt(e.target.value);
+    const val = parseFloat(e.target.value);
     setSliderValue(val);
     setKindness(val);
-    if (onChange) onChange(val);
+    if (onChange) onChange(Math.min(5, Math.max(1, Math.round(val))));
   };
 
-  const emojis = ["😡", "😠", "😐", "🙂", "😊"]; // left=mean, right=nice
+  const thumbLeft = ((resolvedRawValue - 1) / 4) * 100;
+  const moodEmoji = MOOD_EMOJIS[resolvedBucket] || MOOD_EMOJIS[3];
 
   return (
     <div className="kindness-slider">
-      <input
-        type="range"
-        min="1"
-        max="5"
-        step="1"
-        value={resolvedValue}
-        onChange={handleChange}
-        className="slider"
-      />
+      <div className="slider-wrap">
+        <span className="emoji-thumb" style={{ left: `${thumbLeft}%` }} aria-hidden="true">
+          {moodEmoji}
+        </span>
+        <input
+          type="range"
+          min="1"
+          max="5"
+          step="0.01"
+          value={resolvedRawValue}
+          onChange={handleChange}
+          className="slider"
+          aria-label="Kindness level"
+        />
+      </div>
 
-      <div className="slider-labels">
-        {emojis.map((emoji, index) => (
-          <div key={index} className="slider-point">
-            <span className="emoji">{emoji}</span>
-            {index === 0 && <span className="label">Make it meaner</span>}
-            {index === emojis.length - 1 && (
-              <span className="label">Make it nicer</span>
-            )}
-          </div>
-        ))}
+      <div className="kindness-readout">Kindness: {resolvedBucket}/5</div>
+
+      <div className="slider-end-labels">
+        <span className="label">Make it meaner</span>
+        <span className="label">Make it nicer</span>
       </div>
     </div>
   );

@@ -7,10 +7,27 @@
   align-items: center;
 }
 
+.slider-wrap {
+  position: relative;
+  width: 100%;
+}
+
+.emoji-thumb {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 28px;
+  line-height: 1;
+  pointer-events: none;
+  user-select: none;
+  z-index: 2;
+}
+
 .slider {
   width: 100%;
-  margin-bottom: 16px;
+  margin-bottom: 10px;
   -webkit-appearance: none;
+  appearance: none;
   background: var(--border-color);
   height: 6px;
   border-radius: 3px;
@@ -20,46 +37,44 @@
 .slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background: var(--color-primary);
+  width: 0;
+  height: 0;
+  background: transparent;
   cursor: pointer;
-  border: 2px solid var(--text-inverse);
-  margin-top: -9px; /* center thumb on track */
-  transition: background 0.2s;
+  border: 0;
 }
 
 .slider::-moz-range-thumb {
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background: var(--color-primary);
+  width: 0;
+  height: 0;
+  background: transparent;
   cursor: pointer;
-  border: 2px solid var(--text-inverse);
-  transition: background 0.2s;
+  border: 0;
 }
 
-.slider-labels {
+.slider-end-labels {
   display: flex;
   justify-content: space-between;
   width: 100%;
+  margin-top: -35px;
 }
 
-.slider-point {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  font-size: 18px;
+.slider-end-labels .label:first-child {
+  transform: translateX(-77px);
 }
 
-.emoji {
-  font-size: 24px;
-  margin-bottom: 4px;
+.slider-end-labels .label:last-child {
+  transform: translateX(77px);
+}
+
+.kindness-readout {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
 }
 
 .label {
-  font-size: 12px;
-  color: var(--text-muted);
+  font-size: 16px;
+  color: #000;
   text-align: center;
 }
