@@ -60,6 +60,14 @@
   box-shadow: none;
 }
 
+.format-helper-text {
+  width: 80%;
+  margin: 0 auto;
+  text-align: center;
+  color: var(--text-primary);
+  opacity: 0.8;
+}
+
 /* Error alert box above the Generate button */
 .error-alert {
   margin: 10px 0 -5px 0;
