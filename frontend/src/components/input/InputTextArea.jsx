@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useCrashOutStore } from "../../store/useCrashOutStore";
 import "./InputTextArea.css";
-import Button from "../ui/Button.jsx";
 
 function InputTextArea() {
   const [text, setText] = useState("");
@@ -105,6 +104,20 @@ function InputTextArea() {
       </div>
     </div>
   );
+	const inputText = useCrashOutStore((state) => state.inputText);
+	const setInputText = useCrashOutStore((state) => state.setInputText);
+
+	return (
+		<div className="input-wrapper">
+			<textarea
+				className="textbox"
+				value={inputText}
+				onChange={(event) => setInputText(event.target.value)}
+				placeholder="Type your message..."
+				rows={2}
+			/>
+		</div>
+	);
 }
 
 export default InputTextArea;
