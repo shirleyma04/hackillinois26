@@ -54,6 +54,7 @@
 
 /* Recording state overrides */
 .record-btn.recording {
+  background-color: var(--color-secondary);
   color: var(--color-primary);
 }
 
