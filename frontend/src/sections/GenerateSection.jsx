@@ -58,6 +58,28 @@ function GenerateSection() {
     return mapping[label] || label.toLowerCase();
   };
 
+  const mapVoiceFormat = (label) => {
+    const mapping = {
+      "Rap": "rap",
+      "Cursed Spell": "cursed_spell",
+      "Shakespearean Monologue": "shakespearean",
+      "Sports Announcement": "sports_announcement",
+      "Villain Monologue": "villain_monologue",
+    };
+    return mapping[label] || label.toLowerCase();
+  };
+
+  const mapVoicePersonality = (label) => {
+    const mapping = {
+      "British": "british",
+      "Wise Old Wizard": "wise_wizard",
+      "Teenage Girl": "teenage_girl",
+      "Corporate Executive": "corporate_executive",
+      "Cocky Villain": "cocky_villain",
+    };
+    return mapping[label] || label.toLowerCase();
+  };
+
   // Handle TEXT generation
   const handleGenerateText = async () => {
     // Validation
@@ -78,8 +100,8 @@ function GenerateSection() {
       const payload = {
         message,
         angry_at,
-        tone: mapTone(toneLabel),
-        format: mapFormat(textFormat),
+        tone: toneLabel === "Custom..." ? customTone : mapTone(toneLabel),
+        format: textFormat === "Custom..." ? customTextFormat : mapFormat(textFormat),
         kindness_scale: kindness,
         profanity_check: "censored",
       };
@@ -138,6 +160,8 @@ function GenerateSection() {
         format: "text", // Use text format for voice output
         kindness_scale: kindness,
         profanity_check: "censored",
+        voice_format: voiceFormat === "Custom..." ? customVoiceFormat : mapVoiceFormat(voiceFormat),
+        voice_personality: voice === "Custom..." ? customVoice : mapVoicePersonality(voice),
       };
 
       console.log("VOICE - Step 1: Transforming message:", transformPayload);
