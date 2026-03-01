@@ -112,7 +112,7 @@ class VoiceCreateResponse(BaseModel):
 class TransformRequest(BaseModel):
     message: str
     angry_at: Literal["partner", "family", "friend", "coworker", "stranger"]
-    tone: Literal["professional", "intimidating", "shakespearean", "condescending", "disappointed"]
+    tone: Literal["professional", "intimidating", "sarcastic", "condescending", "disappointed"]
     kindness_scale: int = Field(ge=1, le=5)
     format: Literal["email", "text", "social_media", "review", "custom"]
     profanity_check: Literal["censored", "none"] = "censored"

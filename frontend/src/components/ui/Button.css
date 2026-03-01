@@ -37,3 +37,11 @@
   opacity: 0.5;
   cursor: not-allowed;
 }
+
+.btn--match-dropdown {
+  width: 150px;
+  padding: 8px 12px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+}

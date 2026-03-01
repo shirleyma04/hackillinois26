@@ -5,8 +5,8 @@ from elevenlabs.play import play
 API_URL = "http://127.0.0.1:8000/voices/design"
 
 payload = {
-    "voice_description": "A bubbly, energetic high school teenager with a Valley Girl accent. Speaks with a sing-songy, casual tone, often elongating vowels and using phrases like 'like' and 'totally.' Friendly, expressive, and slightly dramatic, capturing the enthusiasm and social vibe of a teenage girl chatting with her friends.",
-    "text": "Oh my gosh, like, did you see what she was wearing today? Totally cute, but, like, so extra. And, like, I cannot even with the cafeteria food—it's, like, seriously the worst. Anyways, we should totally get our nails done this weekend. I mean, like, duh, it's gonna be so much fun! And, like, we have to take a million selfies. Literally, it's, like, a full-on vibe."
+    "voice_description": "A confident, authoritative, and professional voice with a calm and commanding tone, like a CEO or corporate executive addressing employees or stakeholders. Speaks clearly, with moderate pacing and a polished, persuasive style.",
+    "text": "Good morning team. As we move into the next quarter, our focus will be on innovation, efficiency, and delivering results that exceed expectations. Let's stay committed and lead by example."
 }
 
 response = requests.post(API_URL, json=payload)
