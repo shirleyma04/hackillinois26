@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useCrashOutStore } from "../../store/useCrashOutStore";
 import "./InputTextArea.css";
 import Button from "../ui/Button.jsx";
 
 function InputTextArea() {
-  const [text, setText] = useState("");
+  const message = useCrashOutStore((state) => state.message);
+  const setMessage = useCrashOutStore((state) => state.setMessage);
   const [listening, setListening] = useState(false);
   const recognitionRef = useRef(null);
   const finalTranscriptRef = useRef("");
@@ -36,7 +38,7 @@ function InputTextArea() {
         }
       }
 
-      setText(finalTranscriptRef.current + interimTranscript);
+      setMessage(finalTranscriptRef.current + interimTranscript);
     };
 
     recognition.onerror = (event) => {
@@ -62,7 +64,7 @@ function InputTextArea() {
       // Enable scroll only after max height reached
       el.style.overflowY = el.scrollHeight > maxHeight ? "auto" : "hidden";
     }
-  }, [text]);
+  }, [message]);
 
   const toggleListening = () => {
     if (!recognitionRef.current) return;
@@ -81,9 +83,9 @@ function InputTextArea() {
       <textarea
         ref={textareaRef}
         className="textbox"
-        value={text}
+        value={message}
         onChange={(e) => {
-          setText(e.target.value);
+          setMessage(e.target.value);
           finalTranscriptRef.current = e.target.value;
         }}
         placeholder="Type your message..."
