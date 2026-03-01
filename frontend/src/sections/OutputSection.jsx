@@ -4,6 +4,8 @@ import KindnessSlider from "../components/flow/KindnessSlider.jsx";
 import Button from "../components/ui/Button.jsx";
 
 function OutputSection() {
+  const API_BASE = import.meta.env.VITE_API_BASE_URL;
+
   const format = useCrashOutStore((state) => state.format);
   const selectedFormat = useCrashOutStore((state) => state.selectedFormat);
   const transformedMessage = useCrashOutStore(
@@ -68,7 +70,7 @@ function OutputSection() {
     if (!ttsFilePath) return;
 
     try {
-      const response = await fetch(`http://127.0.0.1:8000/${ttsFilePath}`);
+      const response = await fetch(`${API_BASE}${ttsFilePath}`);
       if (!response.ok) throw new Error("Failed to fetch audio file");
 
       const blob = await response.blob(); // get the file as a blob
@@ -131,7 +133,11 @@ function OutputSection() {
         <Button onClick={handleCopy} disabled={loading}>
           Copy
         </Button>
-        {ttsFilePath && <Button onClick={handleDownload} disabled={loading}>Download Voice Message</Button>}
+        {ttsFilePath && (
+          <Button onClick={handleDownload} disabled={loading}>
+            Download Voice Message
+          </Button>
+        )}
       </div>
     </section>
   );
