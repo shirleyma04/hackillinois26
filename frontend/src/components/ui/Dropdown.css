@@ -65,9 +65,9 @@
   left: 50%; /* move left edge to center */
   transform: translateX(-50%); /* center it */
   color: var(--color-secondary);
-  border: 2.5px solid var(--color-primary);
+  border: 3px solid #fff2df;
   border-radius: var(--radius-md);
-  min-width: 170px; /* smaller than before */
+  min-width: 170px; /* smaller tha3n before */
   max-width: 260px; /* menu width */
   z-index: 10;
   margin-top: 4px;
@@ -79,6 +79,15 @@
   cursor: pointer;
   background: var(--color-primary);
   color: var(--color-secondary);
+  border-bottom: 1px solid color-mix(in srgb, var(--text-secondary) 22%, transparent);
+}
+
+.dropdown-item:last-child {
+  border-bottom: none;
+}
+
+[data-theme="dark"] .dropdown-item {
+  border-bottom-color: color-mix(in srgb, var(--text-secondary) 32%, transparent);
 }
 
 .dropdown-item:hover {
