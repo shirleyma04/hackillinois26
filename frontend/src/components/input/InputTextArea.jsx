@@ -86,7 +86,7 @@ function InputTextArea() {
           setText(e.target.value);
           finalTranscriptRef.current = e.target.value;
         }}
-        placeholder="Type or speak your message..."
+        placeholder="Type your message..."
         rows={2}
       />
 
@@ -96,7 +96,7 @@ function InputTextArea() {
             className={`record-icon ${listening ? "pause" : "play"}`}
           ></span>
           <span className="record-text">
-            {listening ? "Stop Recording" : "Start Recording"}
+            {listening ? "Stop Recording" : "Say Your Message"}
           </span>
         </Button>
       </div>
