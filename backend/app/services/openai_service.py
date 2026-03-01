@@ -68,14 +68,16 @@ class OpenAIService:
 
         base_prompt += f"\nKindness level: {kindness_scale}/5\n"
 
-        if kindness_scale <= 2:
-            base_prompt += "Be very kind, polite, and constructive. Use gentle language and positive framing.\n"
+        if kindness_scale == 1:
+            base_prompt += "Be VERY harsh, direct, and intense. Use strong, cutting language. Don't hold back. Make the anger and frustration crystal clear. Be brutal and unfiltered.\n"
+        elif kindness_scale == 2:
+            base_prompt += "Be direct and firm. Don't sugar-coat. Express frustration clearly and bluntly.\n"
         elif kindness_scale == 3:
             base_prompt += "Be balanced and fair. Be direct but not harsh.\n"
         elif kindness_scale == 4:
-            base_prompt += "Be direct and firm. Don't sugar-coat. Express frustration clearly and bluntly.\n"
+            base_prompt += "Be kind, polite, and constructive. Use gentle language and positive framing.\n"
         else:  # kindness_scale == 5
-            base_prompt += "Be VERY harsh, direct, and intense. Use strong, cutting language. Don't hold back. Make the anger and frustration crystal clear. Be brutal and unfiltered.\n"
+            base_prompt += "Be VERY kind, polite, and constructive. Use very gentle language and extremely positive framing. Maximum kindness.\n"
 
         base_prompt += f"\nFormat: {format}\n"
 

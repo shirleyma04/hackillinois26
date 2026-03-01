@@ -23,7 +23,11 @@ function InputSection() {
       <div className="button-group">
         {["Family", "Friend", "Partner", "Coworker/Classmate", "Stranger"].map(
           (person) => (
-            <Button key={person} onClick={() => setAngryAt(mapTarget(person))}>
+            <Button
+              key={person}
+              onClick={() => setAngryAt(mapTarget(person))}
+              className={angry_at === mapTarget(person) ? "active" : ""}
+            >
               {person}
             </Button>
           ),
