@@ -77,6 +77,42 @@ function OutputSection() {
     window.location.href = `mailto:?subject=${subject}&body=${body}`;
   };
 
+  const ttsFilePath = useCrashOutStore((state) => state.ttsFilePath);
+
+  // const handleDownload = () => {
+  //   if (!ttsFilePath) return;
+
+  //   const link = document.createElement("a");
+  //   link.href = `http://127.0.0.1:8000/${ttsFilePath}`;
+  //   link.download = ttsFilePath.split("/").pop();
+  //   document.body.appendChild(link);
+  //   link.click();
+  //   document.body.removeChild(link);
+  // };
+
+  const handleDownload = async () => {
+    if (!ttsFilePath) return;
+
+    try {
+      const response = await fetch(`http://127.0.0.1:8000/${ttsFilePath}`);
+      if (!response.ok) throw new Error("Failed to fetch audio file");
+
+      const blob = await response.blob(); // get the file as a blob
+      const url = window.URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "VoiceMessage.mp3"; // filename only
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      window.URL.revokeObjectURL(url); // clean up
+    } catch (err) {
+      console.error("Download failed:", err);
+    }
+  };
+
   // Only show if there's a transformed message
   if (!transformedMessage) {
     return null;
@@ -124,6 +160,7 @@ function OutputSection() {
         <Button onClick={handleCopy} disabled={loading}>
           Copy
         </Button>
+        {ttsFilePath && <Button onClick={handleDownload} disabled={loading}>Download Voice Message</Button>}
       </div>
     </section>
   );
