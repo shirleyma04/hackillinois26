@@ -1,7 +1,7 @@
- import { create } from "zustand";
+import { create } from "zustand";
 
   export const useCrashOutStore = create((set) => ({
-    //Input fields
+    // Input fields
     message: "",
     angry_at: "",
     tone: "",
@@ -9,15 +9,15 @@
     profanity_check: "censored",
     kindness: 3,
 
-    //Output
+    // Output
     transformedMessage: "",
     profanityDetected: false,
 
-    //UI state
+    // UI state
     isLoading: false,
     error: null,
 
-    //Input setters
+    // Input setters
     setMessage: (message) => set({ message }),
     setAngryAt: (angry_at) => set({ angry_at }),
     setTone: (tone) => set({ tone }),
@@ -31,15 +31,15 @@
       set({ kindness: bounded });
     },
 
-    //Output setters
+    // Output setters
     setTransformedMessage: (transformedMessage) => set({ transformedMessage }),
     setProfanityDetected: (profanityDetected) => set({ profanityDetected }),
 
-    //UI state setters
+    // UI state setters
     setLoading: (isLoading) => set({ isLoading }),
     setError: (error) => set({ error }),
 
-    //Reset everything
+    // Reset everything
     reset: () => set({
       message: "",
       angry_at: "",
