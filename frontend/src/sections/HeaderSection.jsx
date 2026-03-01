@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import "./HeaderSection.css";
-import LogoLight from "../assets/big-logo-light.png";
-import LogoDark from "../assets/big-logo-dark.png";
+import LogoLight from "../assets/rec-logo-light.png";
+import LogoDark from "../assets/rec-logo-dark.png";
 
 function HeaderSection() {
   const [theme, setTheme] = useState("light");
@@ -16,12 +16,21 @@ function HeaderSection() {
     return () => observer.disconnect();
   }, []);
 
-  const logoSrc = theme === "dark" ? LogoDark : LogoLight;
+  const logoSrc = theme === "dark" ? LogoLight : LogoDark;
 
   return (
     <section className="header-section">
       <div className="logo-container">
-        <img src={logoSrc} alt="Logo" className="logo" />
+        {/* <img src={logoSrc} alt="Logo" className="logo" /> */}
+        <img src={logoSrc}
+              alt="Logo"
+              style={{
+                height: "100%",       // fill the container height
+                width: "auto",        // maintain aspect ratio
+                objectFit: "contain", // scale without cropping
+                display: "block",
+              }}
+        />
       </div>
     </section>
   );
