@@ -1,6 +1,6 @@
 .kindness-slider {
   width: 100%;
-  max-width: 400px;
+  max-width: 500px;
   margin: 20px auto;
   display: flex;
   flex-direction: column;
@@ -105,7 +105,8 @@
 [data-theme="dark"] .kindnessLabel--nicer {
   color: var(--text-primary);
   opacity: 1;
-  text-shadow: 0 0 10px color-mix(in oklab, var(--text-primary) 35%, transparent);
+  text-shadow: 0 0 10px
+    color-mix(in oklab, var(--text-primary) 35%, transparent);
 }
 
 .kindness-readout {
@@ -119,6 +120,13 @@
   text-align: center;
   white-space: nowrap;
   margin-top: -2px;
+}
+
+.kindness-inline-row {
+  display: flex; /* makes children flex items */
+  justify-content: center; /* center them horizontally */
+  align-items: center; /* vertically align text */
+  gap: 50px; /* space between each span */
 }
 
 .kindness-inline-item.kindness {
