@@ -7,46 +7,148 @@ import "./OutputSection.css";
 function OutputSection() {
   const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
+  // Store state
+  const message = useCrashOutStore((state) => state.message);
+  const angry_at = useCrashOutStore((state) => state.angry_at);
+  const tone = useCrashOutStore((state) => state.tone);
+  const kindness = useCrashOutStore((state) => state.kindness);
+  const voice_format = useCrashOutStore((state) => state.voice_format);
+  const voice_personality = useCrashOutStore(
+    (state) => state.voice_personality,
+  );
   const format = useCrashOutStore((state) => state.format);
   const selectedFormat = useCrashOutStore((state) => state.selectedFormat);
   const transformedMessage = useCrashOutStore(
     (state) => state.transformedMessage,
   );
+  const setTransformedMessage = useCrashOutStore(
+    (state) => state.setTransformedMessage,
+  );
+  const setProfanityDetected = useCrashOutStore(
+    (state) => state.setProfanityDetected,
+  );
+  const ttsFilePath = useCrashOutStore((state) => state.ttsFilePath);
+  const setTtsFilePath = useCrashOutStore((state) => state.setTtsFilePath);
+  const setError = useCrashOutStore((state) => state.setError);
+  const stopAudio = useCrashOutStore((state) => state.stopAudio);
+  const setCurrentAudio = useCrashOutStore((state) => state.setCurrentAudio);
+  const lastGenerationParams = useCrashOutStore(
+    (state) => state.lastGenerationParams,
+  );
+  const setLastGenerationParams = useCrashOutStore(
+    (state) => state.setLastGenerationParams,
+  );
+
+  // Local state
   const [loading, setLoading] = useState(false);
   const [dots, setDots] = useState("");
+  const [cachedVoiceId, setCachedVoiceId] = useState(null);
+  const isVoiceMode = voice_format && voice_personality;
   const effectiveSelectedFormat =
     selectedFormat || (format === "email" ? "email" : "");
   const isEmailSend = effectiveSelectedFormat === "email";
 
-  // Animate the dots while loading
+  // Animate dots while loading
   useEffect(() => {
     if (!loading) return;
-
     const interval = setInterval(() => {
       setDots((prev) => (prev.length < 3 ? prev + "." : ""));
-    }, 500); // Add a dot every 0.5s
-
+    }, 500);
     return () => clearInterval(interval);
   }, [loading]);
 
+  // Voice personality → TTS voice ID map
+  const voiceIdMap = {
+    british: "P4DhdyNCB4Nl6MA0sL45",
+    wise_wizard: "0rEo3eAjssGDUCXHYENf",
+    teenage_girl: "SaxQmcnUVUYw2AfMaRkL",
+    corporate_executive: "cW9TKFZZUF6RNR1xt00R",
+    cocky_villain: "zYcjlYFOd3taleS0gkk3",
+  };
+
+  const flashError = (msg) => {
+    setError(msg);
+    setTimeout(() => setError(null), 1500);
+  };
+
+  // Handle regenerating/transformation of message
   const handleMakeChange = async () => {
     if (!message || !angry_at || !tone || !format) return;
     setLoading(true);
-    // setTransformedMessage("");
+    stopAudio();
 
     try {
+      // Determine tone dynamically if in voice mode
+      let effectiveTone = tone;
+      if (isVoiceMode) {
+        if (kindness <= 2) effectiveTone = "intimidating";
+        else if (kindness === 3) effectiveTone = "disappointed";
+        else effectiveTone = "professional";
+      }
+
       const payload = {
         message,
         angry_at,
-        tone,
-        format,
+        tone: effectiveTone,
+        format: isVoiceMode ? "text" : format,
         kindness_scale: kindness,
         profanity_check: "censored",
       };
 
+      if (isVoiceMode) {
+        payload.voice_format = voice_format;
+        payload.voice_personality = voice_personality;
+      }
+
+      // Call your transformation API
       const result = await transformService(payload);
+
       setTransformedMessage(result.transformed_message);
       setProfanityDetected(result.profanity_detected);
+
+      // Voice mode: generate TTS
+      if (isVoiceMode) {
+        let selectedVoiceId = voiceIdMap[voice_personality] || cachedVoiceId;
+        if (!selectedVoiceId) {
+          flashError(
+            "Invalid voice selected. Custom voices require initial generation.",
+          );
+          return;
+        }
+
+        const ttsResponse = await fetch(`${API_BASE}/tts/`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            text: result.transformed_message,
+            voice_id: selectedVoiceId,
+            model_id: "eleven_multilingual_v2",
+          }),
+        });
+
+        if (!ttsResponse.ok) throw new Error("TTS generation failed");
+
+        const ttsData = await ttsResponse.json();
+        setTtsFilePath(ttsData.file_path);
+
+        const audioUrl = `${API_BASE}/${ttsData.file_path}`;
+        const audio = new Audio(audioUrl);
+        setCurrentAudio(audio);
+        audio.play();
+
+        flashError("Voice regenerated! You can download the updated MP3.");
+      }
+
+      // Update last generation params
+      if (isVoiceMode) {
+        setLastGenerationParams({
+          message,
+          angry_at,
+          voice_format,
+          voice_personality,
+          kindness,
+        });
+      }
     } catch (err) {
       console.error("Re-transform error:", err);
       setTransformedMessage("Failed to generate message.");
@@ -55,9 +157,9 @@ function OutputSection() {
     }
   };
 
+  // Copy message to clipboard
   const handleCopy = async () => {
     if (!transformedMessage) return;
-
     try {
       await navigator.clipboard.writeText(transformedMessage);
     } catch (err) {
@@ -65,266 +167,44 @@ function OutputSection() {
     }
   };
 
-
-    const message = useCrashOutStore((state) => state.message);
-    const angry_at = useCrashOutStore((state) => state.angry_at);
-    const tone = useCrashOutStore((state) => state.tone);
-    const format = useCrashOutStore((state) => state.format);
-    const selectedFormat = useCrashOutStore((state) => state.selectedFormat);
-    const kindness = useCrashOutStore((state) => state.kindness);
-    const voice_format = useCrashOutStore((state) => state.voice_format);
-    const voice_personality = useCrashOutStore((state) => state.voice_personality);
-    const transformedMessage = useCrashOutStore(
-      (state) => state.transformedMessage,
-    );
-    const setTransformedMessage = useCrashOutStore(
-      (state) => state.setTransformedMessage,
-    );
-    const setProfanityDetected = useCrashOutStore(
-      (state) => state.setProfanityDetected,
-    );
-    const ttsFilePath = useCrashOutStore((state) => state.ttsFilePath);
-    const setTtsFilePath = useCrashOutStore((state) => state.setTtsFilePath);
-    const setError = useCrashOutStore((state) => state.setError);
-    const stopAudio = useCrashOutStore((state) => state.stopAudio);
-    const setCurrentAudio = useCrashOutStore((state) => state.setCurrentAudio);
-    const lastGenerationParams = useCrashOutStore((state) => state.lastGenerationParams);
-    const setLastGenerationParams = useCrashOutStore((state) => state.setLastGenerationParams);
-
-    const [loading, setLoading] = useState(false);
-    const [dots, setDots] = useState("");
-    const [cachedVoiceId, setCachedVoiceId] = useState(null);
-
-    const effectiveSelectedFormat =
-      selectedFormat || (format === "email" ? "email" : "");
-    const isEmailSend = effectiveSelectedFormat === "email";
-    const isVoiceMode = voice_format && voice_personality;
-
-    // Animate the dots while loading
-    useEffect(() => {
-      if (!loading) return;
-
-      const interval = setInterval(() => {
-        setDots((prev) => (prev.length < 3 ? prev + "." : ""));
-      }, 500); // Add a dot every 0.5s
-
-      return () => clearInterval(interval);
-    }, [loading]);
-
-    // Voice ID mapping using the stored personality keys (british, wise_wizard, etc.)
-    const voiceIdMap = {
-      british: "P4DhdyNCB4Nl6MA0sL45",
-      wise_wizard: "0rEo3eAjssGDUCXHYENf",
-      teenage_girl: "SaxQmcnUVUYw2AfMaRkL",
-      corporate_executive: "cW9TKFZZUF6RNR1xt00R",
-      cocky_villain: "zYcjlYFOd3taleS0gkk3",
-    };
-
-    const flashError = (msg) => {
-      setError(msg);
-      setTimeout(() => setError(null), 1500);
-    };
-
-    const handleMakeChange = async () => {
-      if (!message || !angry_at) return;
-
-      // Stop any playing audio
-      stopAudio();
-
-      // Detect if ANY parameters have changed from last generation
-      const currentParams = {
-        message,
-        angry_at,
-        voice_format,
-        voice_personality,
-        kindness,
-      };
-
-      const hasParamsChanged = lastGenerationParams && (
-        lastGenerationParams.message !== currentParams.message ||
-        lastGenerationParams.angry_at !== currentParams.angry_at ||
-        lastGenerationParams.voice_format !== currentParams.voice_format ||
-        lastGenerationParams.voice_personality !== currentParams.voice_personality ||
-        lastGenerationParams.kindness !== currentParams.kindness
-      );
-
-      // If parameters changed for voice mode, clear voice cache to force fresh generation
-      if (hasParamsChanged && isVoiceMode) {
-        setCachedVoiceId(null);
-      }
-
+  // Send email
+  const handleSend = async () => {
+    if (!transformedMessage || !isEmailSend) return;
+    try {
       setLoading(true);
-
-      try {
-        // Determine tone dynamically based on kindness for voice mode
-        let effectiveTone = tone;
-        if (isVoiceMode) {
-          if (kindness <= 2) {
-            effectiveTone = "intimidating";
-          } else if (kindness === 3) {
-            effectiveTone = "disappointed";
-          } else {
-            effectiveTone = "professional";
-          }
-        }
-
-        const payload = {
-          message,
-          angry_at,
-          tone: effectiveTone,
-          format: isVoiceMode ? "text" : format,
-          kindness_scale: kindness,
-          profanity_check: "censored",
-        };
-
-        // Add voice-specific parameters if in voice mode
-        if (isVoiceMode) {
-          payload.voice_format = voice_format;
-          payload.voice_personality = voice_personality;
-        }
-
-        const result = await transformService(payload);
-        setTransformedMessage(result.transformed_message);
-        setProfanityDetected(result.profanity_detected);
-
-        // If voice mode, regenerate TTS
-        if (isVoiceMode) {
-          // Determine voice ID - directly look up using the stored personality value
-          let selectedVoiceId = voiceIdMap[voice_personality];
-
-          // If not a standard voice, it must be custom - use cached ID
-          if (!selectedVoiceId) {
-            selectedVoiceId = cachedVoiceId;
-          }
-
-          // Debug logging
-          console.log("Voice personality:", voice_personality);
-          console.log("Selected voice ID:", selectedVoiceId);
-          console.log("Cached voice ID:", cachedVoiceId);
-
-          if (!selectedVoiceId) {
-            flashError("Invalid voice selected. Custom voices require initial generation.");
-            return;
-          }
-
-          const ttsResponse = await fetch("http://127.0.0.1:8000/tts/", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              text: result.transformed_message,
-              voice_id: selectedVoiceId,
-              model_id: "eleven_multilingual_v2",
-            }),
-          });
-
-          if (!ttsResponse.ok) {
-            throw new Error("TTS generation failed");
-          }
-
-          const ttsData = await ttsResponse.json();
-          setTtsFilePath(ttsData.file_path);
-
-          const audioUrl = `http://127.0.0.1:8000/${ttsData.file_path}`;
-          const audio = new Audio(audioUrl);
-          setCurrentAudio(audio); // Save to store so it can be stopped later
-          audio.play();
-
-          flashError("Voice regenerated! You can download the updated MP3.");
-        }
-
-        // Update last generation parameters after successful regeneration
-        if (isVoiceMode) {
-          setLastGenerationParams({
-            message,
-            angry_at,
-            voice_format,
-            voice_personality,
-            kindness,
-          });
-        }
-      } catch (err) {
-        console.error("Re-transform error:", err);
-        setTransformedMessage("Failed to generate message.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    const handleCopy = async () => {
-      if (!transformedMessage) return;
-
-      try {
-        await navigator.clipboard.writeText(transformedMessage);
-      } catch (err) {
-        console.error("Copy failed:", err);
-      }
-    };
-
-    const handleSend = async () => {
-      if (!transformedMessage || !isEmailSend) return;
-
-      try {
-        setLoading(true);
-        const subject = "Message";
-        const body = encodeURIComponent(transformedMessage);
-        window.location.href = `mailto:?subject=${subject}&body=${body}`;
-      } catch (err) {
-        console.error("Send failed:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    const handleDownload = async () => {
-      if (!ttsFilePath) return;
-
-      try {
-        const response = await fetch(`http://127.0.0.1:8000/${ttsFilePath}`);
-        if (!response.ok) throw new Error("Failed to fetch audio file");
-
-        const blob = await response.blob();
-        const url = window.URL.createObjectURL(blob);
-
-        const link = document.createElement("a");
-        link.href = url;
-        link.download = "VoiceMessage.mp3";
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-
-        window.URL.revokeObjectURL(url);
-      } catch (err) {
-        console.error("Download failed:", err);
-      }
-    };
-
-    // Only show if there's a transformed message
-    if (!transformedMessage) {
-      return null;
+      const subject = "Message";
+      const body = encodeURIComponent(transformedMessage);
+      window.location.href = `mailto:?subject=${subject}&body=${body}`;
+    } catch (err) {
+      console.error("Send failed:", err);
+    } finally {
+      setLoading(false);
     }
+  };
 
-    return (
-      <section>
-        <h2>Your Transformed Message</h2>
-        <div
-          style={{
-            padding: "20px",
-            margin: "20px 0",
-            background: "#f5f5f5",
-            borderRadius: "8px",
-            whiteSpace: "pre-wrap",
-            minHeight: "60px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            fontStyle: loading ? "italic" : "normal",
-            color: loading ? "#666" : "#000",
-          }}
-        >
-          {loading
-            ? `Generating your message${dots}`
-            : transformedMessage || "Your message will appear here."}
-        </div>
+  // Download TTS audio
+  const handleDownload = async () => {
+    if (!ttsFilePath) return;
+
+    try {
+      const response = await fetch(`${API_BASE}/${ttsFilePath}`);
+      if (!response.ok) throw new Error("Failed to fetch audio file");
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "VoiceMessage.mp3";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error("Download failed:", err);
+    }
+  };
 
   return (
     <section>
@@ -337,6 +217,7 @@ function OutputSection() {
 
       <h3>Want to change the kindness of your message?</h3>
       <KindnessSlider />
+
       <div
         style={{
           display: "flex",
@@ -369,4 +250,4 @@ function OutputSection() {
   );
 }
 
-  export default OutputSection;
+export default OutputSection;
