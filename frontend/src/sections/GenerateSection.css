@@ -16,7 +16,7 @@
 
 .generator-container h2 {
   width: 80%; /* text width 80% of container */
-  margin: 0 auto 6px auto;
+  margin: 10px auto 8px auto;
 }
 
 .generator-container h3 {
@@ -24,31 +24,12 @@
   margin: 4px auto 0 auto;
 }
 
-/* Back button in top-left */
-.back-button {
-  align-self: flex-start;
-  background: none;
-  border: none;
-  font-size: 1rem;
-  cursor: pointer;
-  color: var(--color-tertiary);
-  margin: 0;
-}
-
-.back-button:hover {
-  color: var(--color-muted);
-}
-
-.back-button:focus {
-  outline: none;
-}
-
 /* Choice buttons stacked */
 .choice-buttons button {
   width: 100%;
 }
 
-/* Apply to all Generate buttons inside generator-container */
-.generator-container > button:last-of-type {
+.second-choice-buttons button {
+  width: 100%;
   margin-top: 8px;
 }

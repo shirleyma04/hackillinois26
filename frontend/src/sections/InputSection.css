@@ -1,3 +1,7 @@
+.input-text {
+  margin-bottom: 8px;
+}
+
 .button-group {
   display: flex;
   justify-content: center;

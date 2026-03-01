@@ -2,18 +2,40 @@
    GLOBAL VARIABLES & DYNAMIC SIZING
 ========================= */
 
-/* Font Import */
 @font-face {
-  font-family: "Stoke";
-  src: url("/fonts/stoke-regular.ttf") format("truetype");
+  font-family: "Shantell Sans";
+  src: url("../fonts/ShantellSans-Light.ttf") format("truetype");
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Shantell Sans";
+  src: url("../fonts/ShantellSans-Regular.ttf") format("truetype");
   font-weight: 400;
   font-style: normal;
 }
+
 @font-face {
-  font-family: "Stoke";
-  src: url("/fonts/stoke-light.ttf") format("truetype");
-  font-weight: 300;
+  font-family: "Shantell Sans";
+  src: url("../fonts/ShantellSans-Medium.ttf") format("truetype");
+  font-weight: 500;
   font-style: normal;
+}
+
+@font-face {
+  font-family: "Shantell Sans";
+  src: url("../fonts/ShantellSans-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+}
+
+/* Italics (if any) */
+@font-face {
+  font-family: "Shantell Sans";
+  src: url("../fonts/ShantellSans-Italic.ttf") format("truetype");
+  font-weight: 400;
+  font-style: italic;
 }
 
 /* =========================
@@ -45,7 +67,7 @@
   --shadow-medium: 0 6px 18px rgba(0, 0, 0, 0.15);
 
   /* Typography */
-  --font-primary: "Stoke", serif;
+  --font-primary: "Shantell Sans", sans-serif;
   --font-secondary: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   --font-size-xs: 0.75rem; /* 12px */
   --font-size-sm: 0.875rem; /* 14px */
@@ -130,7 +152,7 @@ body {
   margin: 0;
   background: var(--bg-main);
   color: var(--text-primary);
-  font-family: var(--font-secondary);
+  font-family: var(--font-primary);
 }
 
 .appShell {

@@ -5,6 +5,7 @@
   padding: var(--space-xl) 0;
   display: grid;
   gap: var(--space-lg);
+  font-family: var(--font-primary);
 }
 
 .page-shell > section,
