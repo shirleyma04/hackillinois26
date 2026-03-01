@@ -21,30 +21,34 @@ function GenerateSection() {
   const setFormat = useCrashOutStore((state) => state.setFormat);
   const setTone = useCrashOutStore((state) => state.setTone);
   const setError = useCrashOutStore((state) => state.setError);
-  const setTransformedMessage = useCrashOutStore((state) => state.setTransformedMessage);
-  const setProfanityDetected = useCrashOutStore((state) => state.setProfanityDetected);
+  const setTransformedMessage = useCrashOutStore(
+    (state) => state.setTransformedMessage,
+  );
+  const setProfanityDetected = useCrashOutStore(
+    (state) => state.setProfanityDetected,
+  );
 
   const handleBack = () => setMode(null);
 
   // Map UI labels to backend values
   const mapTone = (label) => {
     const mapping = {
-      "Professional": "professional",
-      "Intimidating": "intimidating",
-      "Sarcastic": "sarcastic",
-      "Condescending": "condescending",
-      "Disappointed": "disappointed",
+      Professional: "professional",
+      Intimidating: "intimidating",
+      Sarcastic: "sarcastic",
+      Condescending: "condescending",
+      Disappointed: "disappointed",
     };
     return mapping[label] || label.toLowerCase();
   };
 
   const mapFormat = (label) => {
     const mapping = {
-      "Email": "email",
+      Email: "email",
       "Text Message": "text",
       "Social Media Post": "social_media",
-      "Review": "review",
-      "Custom": "custom",
+      Review: "review",
+      Custom: "custom",
     };
     return mapping[label] || label.toLowerCase();
   };
@@ -52,7 +56,12 @@ function GenerateSection() {
   // Handle TEXT generation
   const handleGenerateText = async () => {
     // Validation
-    if (!message || !angry_at || textFormat === "Select format..." || toneLabel === "Select tone...") {
+    if (
+      !message ||
+      !angry_at ||
+      textFormat === "Select format..." ||
+      toneLabel === "Select tone..."
+    ) {
       setError("Please fill in all fields (message, target, format, tone)");
       return;
     }
@@ -90,8 +99,15 @@ function GenerateSection() {
   // Handle VOICE generation (TEXT transform + TTS)
   const handleGenerateVoice = async () => {
     // Validation
-    if (!message || !angry_at || voiceFormat === "Select format..." || voice === "Select voice...") {
-      setError("Please fill in all fields (message, target, voice format, voice)");
+    if (
+      !message ||
+      !angry_at ||
+      voiceFormat === "Select format..." ||
+      voice === "Select voice..."
+    ) {
+      setError(
+        "Please fill in all fields (message, target, voice format, voice)",
+      );
       return;
     }
 
@@ -135,8 +151,9 @@ function GenerateSection() {
       // Store audio file path and play it
 
       console.log("VOICE - TTS integration pending (your friend's work)");
-      setError("Voice generated! (Audio playback coming soon - TTS integration needed)");
-
+      setError(
+        "Voice generated! (Audio playback coming soon - TTS integration needed)",
+      );
     } catch (err) {
       console.error("VOICE - Error:", err);
       setError(err.message || "Failed to generate voice message");
@@ -160,10 +177,7 @@ function GenerateSection() {
       {/* Text message generator */}
       {mode === "text" && (
         <div className="generator-container fade-in">
-          <Button className="back-button" onClick={handleBack}>
-            ← Back
-          </Button>
-          <h2>Generate a Text Message</h2>
+          <h2>Generate A Text Message</h2>
           <h3>What should the message format be?</h3>
           <Dropdown
             label={textFormat}
@@ -190,16 +204,16 @@ function GenerateSection() {
             onSelect={setToneLabel}
           />
           <Button onClick={handleGenerateText}>Generate!</Button>
+          <Button className="back-button" onClick={handleBack}>
+            ← Back to selection
+          </Button>
         </div>
       )}
 
       {/* Voice message generator */}
       {mode === "voice" && (
         <div className="generator-container fade-in">
-          <Button className="back-button" onClick={handleBack}>
-            ← Back
-          </Button>
-          <h2>Generate a Voice Message</h2>
+          <h2>Generate A Voice Message</h2>
           <h3>What should the message format be?</h3>
           <Dropdown
             label={voiceFormat}
@@ -227,6 +241,9 @@ function GenerateSection() {
             onSelect={setVoice}
           />
           <Button onClick={handleGenerateVoice}>Generate!</Button>
+          <Button className="back-button" onClick={handleBack}>
+            ← Back
+          </Button>
         </div>
       )}
     </section>
