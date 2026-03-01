@@ -1,8 +1,22 @@
 # SHARED - Application configuration
 
 from app.core.settings import Settings
+from pydantic_settings import BaseSettings, SettingsConfigDict
+
 
 # Create single instance of settings
+# settings = Settings()
+
+class Settings(BaseSettings):
+    openai_api_key: str
+    elevenlabs_api_key: str
+    openai_model: str
+
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        env_file_encoding="utf-8"
+    )
+
 settings = Settings()
 
 # Configuration constants

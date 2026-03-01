@@ -23,6 +23,9 @@ function GenerateSection() {
   const angry_at = useCrashOutStore((state) => state.angry_at);
   const kindness = useCrashOutStore((state) => state.kindness);
   const error = useCrashOutStore((state) => state.error); // subscribe to error changes
+  const setTtsFilePath = useCrashOutStore((state) => state.setTtsFilePath);
+
+  // Get setters
   const setFormat = useCrashOutStore((state) => state.setFormat);
   const setTone = useCrashOutStore((state) => state.setTone);
   const setError = useCrashOutStore((state) => state.setError);
@@ -118,6 +121,15 @@ function GenerateSection() {
   };
 
   // Handle VOICE generation
+  const voiceIdMap = {
+    "British": "P4DhdyNCB4Nl6MA0sL45",
+    "Wise Old Wizard": "0rEo3eAjssGDUCXHYENf",
+    "Teenage Girl": "SaxQmcnUVUYw2AfMaRkL",
+    "Corporate Executive": "cW9TKFZZUF6RNR1xt00R",
+    "Cocky Villain": "zYcjlYFOd3taleS0gkk3",
+  };
+
+  // Handle VOICE generation (TEXT transform + TTS)
   const handleGenerateVoice = async () => {
     if (!validateVoiceFields()) return;
 
@@ -139,6 +151,62 @@ function GenerateSection() {
       flashError(
         "Voice generated! (Audio playback coming soon - TTS integration needed)",
       );
+      // Step 2: Generate speech from transformed message
+      console.log("VOICE - Step 2: Generating speech (TTS)...");
+
+      // Step 2: Generate speech from transformed message
+      const selectedVoiceId = voiceIdMap[voice];
+
+      if (!selectedVoiceId) {
+        setError("Invalid voice selected");
+        return;
+      }
+
+      const ttsResponse = await fetch("http://127.0.0.1:8000/tts/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          text: transformResult.transformed_message,
+          voice_id: selectedVoiceId,
+          model_id: "eleven_multilingual_v2",
+        }),
+      });
+
+      if (!ttsResponse.ok) {
+        throw new Error("TTS generation failed");
+      }
+
+      const ttsData = await ttsResponse.json();
+      console.log("VOICE - TTS result:", ttsData);
+
+      setTtsFilePath(ttsData.file_path);
+
+      // 🎧 Play audio automatically
+      const audioUrl = `http://127.0.0.1:8000/${ttsData.file_path}`;
+      const audio = new Audio(audioUrl);
+      audio.play();
+
+      // Optional: store audio URL in Zustand later
+      // setAudioUrl(audioUrl);
+
+      setError("Voice generated! You can now download the MP3.");
+
+      // TODO: Call TTS service
+      // const ttsResult = await fetch('http://localhost:8000/tts/', {
+      //   method: 'POST',
+      //   headers: { 'Content-Type': 'application/json' },
+      //   body: JSON.stringify({
+      //     text: transformResult.transformed_message,
+      //     voice_id: "JBFqnCBsd6RMkjVDRZzb", // Default voice (map from dropdown later)
+      //     model_id: "eleven_multilingual_v2"
+      //   })
+      // });
+      // const audioData = await ttsResult.json();
+      // Store audio file path and play it
+
+      // console.log("VOICE - TTS integration pending (your friend's work)");
+      // setError("Voice generated! (Audio playback coming soon - TTS integration needed)");
+
     } catch (err) {
       flashError(err.message || "Failed to generate voice message");
     } finally {

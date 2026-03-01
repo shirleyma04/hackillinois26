@@ -3,6 +3,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.routers import transform, tts, voices, music
+from fastapi.staticfiles import StaticFiles
 
 app = FastAPI(
     title="Crash Out",
@@ -29,6 +30,9 @@ app.include_router(
 app.include_router(tts.router, tags=["voice"])
 app.include_router(voices.router, tags=["voice"])
 app.include_router(music.router, tags=["voice"])
+
+app.mount("/tts_output", StaticFiles(directory="app/tts_output"), name="tts_output")
+
 
 @app.get("/")
 async def root():

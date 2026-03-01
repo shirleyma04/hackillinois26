@@ -6,8 +6,16 @@
   gap: var(--space-sm); /* optional spacing between textbox and button */
 }
 
+.input-row {
+  width: 80%;
+}
+
+.textbox-wrapper {
+  width: 100%;
+}
+
 .textbox {
-  width: 80%; /* fills the wrapper */
+  width: 100%; /* fills the wrapper */
   box-sizing: border-box;
   min-height: calc(1.2em * 2); /* 2 lines start */
   max-height: calc(1.2em * 6); /* grows to 6 lines */
@@ -33,10 +41,43 @@
   box-shadow: none;
 }
 
-.speaking-button-wrapper {
-  width: 80%; /* match textbox width */
+.controls-row {
+  width: 80%;
   display: flex;
-  justify-content: flex-end; /* left-align the button relative to textbox */
+  align-items: center;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.recorded-audio-player {
+  flex: 1;
+  min-width: 0;
+  height: 40px;
+  border-radius: var(--radius-md);
+}
+
+.audio-player-placeholder {
+  flex: 1;
+}
+
+.trash-audio-btn {
+  width: 36px;
+  min-width: 36px;
+  min-height: 36px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.trash-icon {
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.trash-placeholder {
+  width: 36px;
+  min-width: 36px;
 }
 /* ================================
    BUTTON AND ICON STYLING
@@ -45,11 +86,21 @@
 .record-btn {
   display: flex;
   align-items: center;
-  gap: 9px;
-  padding: 8px 12px;
+  gap: 6px;
+  padding: 6px 10px;
+  min-height: 36px;
   cursor: pointer;
   transition: all 0.2s ease;
   color: var(--color-secondary); /* default text */
+}
+
+.compact-record-btn {
+  flex-shrink: 0;
+}
+
+.record-emoji {
+  font-size: 0.95rem;
+  line-height: 1;
 }
 
 /* Recording state overrides */
