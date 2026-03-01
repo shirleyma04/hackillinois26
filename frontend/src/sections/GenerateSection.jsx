@@ -11,6 +11,11 @@ function GenerateSection() {
   const [toneLabel, setToneLabel] = useState("Select tone...");
   const [voiceFormat, setVoiceFormat] = useState("Select format...");
   const [voice, setVoice] = useState("Select voice...");
+  const [customTextFormat, setCustomTextFormat] = useState("");
+  const [customTone, setCustomTone] = useState("");
+  const [customVoiceFormat, setCustomVoiceFormat] = useState("");
+  const [customVoice, setCustomVoice] = useState("");
+  const [loading, setLoading] = useState(false);
 
   // Get state from Zustand store
   const message = useCrashOutStore((state) => state.message);
@@ -21,30 +26,34 @@ function GenerateSection() {
   const setFormat = useCrashOutStore((state) => state.setFormat);
   const setTone = useCrashOutStore((state) => state.setTone);
   const setError = useCrashOutStore((state) => state.setError);
-  const setTransformedMessage = useCrashOutStore((state) => state.setTransformedMessage);
-  const setProfanityDetected = useCrashOutStore((state) => state.setProfanityDetected);
+  const setTransformedMessage = useCrashOutStore(
+    (state) => state.setTransformedMessage,
+  );
+  const setProfanityDetected = useCrashOutStore(
+    (state) => state.setProfanityDetected,
+  );
 
   const handleBack = () => setMode(null);
 
   // Map UI labels to backend values
   const mapTone = (label) => {
     const mapping = {
-      "Professional": "professional",
-      "Intimidating": "intimidating",
-      "Sarcastic": "sarcastic",
-      "Condescending": "condescending",
-      "Disappointed": "disappointed",
+      Professional: "professional",
+      Intimidating: "intimidating",
+      Sarcastic: "sarcastic",
+      Condescending: "condescending",
+      Disappointed: "disappointed",
     };
     return mapping[label] || label.toLowerCase();
   };
 
   const mapFormat = (label) => {
     const mapping = {
-      "Email": "email",
+      Email: "email",
       "Text Message": "text",
       "Social Media Post": "social_media",
-      "Review": "review",
-      "Custom": "custom",
+      Review: "review",
+      Custom: "custom",
     };
     return mapping[label] || label.toLowerCase();
   };
@@ -52,12 +61,18 @@ function GenerateSection() {
   // Handle TEXT generation
   const handleGenerateText = async () => {
     // Validation
-    if (!message || !angry_at || textFormat === "Select format..." || toneLabel === "Select tone...") {
+    if (
+      !message ||
+      !angry_at ||
+      textFormat === "Select format..." ||
+      toneLabel === "Select tone..."
+    ) {
       setError("Please fill in all fields (message, target, format, tone)");
       return;
     }
 
     setError(null);
+    setLoading(true); // START loading
 
     try {
       const payload = {
@@ -84,14 +99,31 @@ function GenerateSection() {
     } catch (err) {
       console.error("TEXT - Transform error:", err);
       setError(err.message || "Failed to transform message");
+    } finally {
+      setLoading(false);
     }
+  };
+
+  const voiceIdMap = {
+    "British": "P4DhdyNCB4Nl6MA0sL45",
+    "Wise Old Wizard": "0rEo3eAjssGDUCXHYENf",
+    "Teenage Girl": "SaxQmcnUVUYw2AfMaRkL",
+    "Corporate Executive": "cW9TKFZZUF6RNR1xt00R",
+    "Cocky Villain": "zYcjlYFOd3taleS0gkk3",
   };
 
   // Handle VOICE generation (TEXT transform + TTS)
   const handleGenerateVoice = async () => {
     // Validation
-    if (!message || !angry_at || voiceFormat === "Select format..." || voice === "Select voice...") {
-      setError("Please fill in all fields (message, target, voice format, voice)");
+    if (
+      !message ||
+      !angry_at ||
+      voiceFormat === "Select format..." ||
+      voice === "Select voice..."
+    ) {
+      setError(
+        "Please fill in all fields (message, target, voice format, voice)",
+      );
       return;
     }
 
@@ -121,6 +153,41 @@ function GenerateSection() {
       // Step 2: Generate speech from transformed message
       console.log("VOICE - Step 2: Generating speech (TTS)...");
 
+      // Step 2: Generate speech from transformed message
+      const selectedVoiceId = voiceIdMap[voice];
+
+      if (!selectedVoiceId) {
+        setError("Invalid voice selected");
+        return;
+      }
+
+      const ttsResponse = await fetch("http://127.0.0.1:8000/tts/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          text: transformResult.transformed_message,
+          voice_id: selectedVoiceId,
+          model_id: "eleven_multilingual_v2",
+        }),
+      });
+
+      if (!ttsResponse.ok) {
+        throw new Error("TTS generation failed");
+      }
+
+      const ttsData = await ttsResponse.json();
+      console.log("VOICE - TTS result:", ttsData);
+
+      // 🎧 Play audio automatically
+      const audioUrl = `http://127.0.0.1:8000/${ttsData.file_path}`;
+      const audio = new Audio(audioUrl);
+      audio.play();
+
+      // Optional: store audio URL in Zustand later
+      // setAudioUrl(audioUrl);
+
+      setError(null);
+
       // TODO: Call TTS service
       // const ttsResult = await fetch('http://localhost:8000/tts/', {
       //   method: 'POST',
@@ -135,7 +202,7 @@ function GenerateSection() {
       // Store audio file path and play it
 
       console.log("VOICE - TTS integration pending (your friend's work)");
-      setError("Voice generated! (Audio playback coming soon - TTS integration needed)");
+      // setError("Voice generated! (Audio playback coming soon - TTS integration needed)");
 
     } catch (err) {
       console.error("VOICE - Error:", err);
@@ -160,10 +227,7 @@ function GenerateSection() {
       {/* Text message generator */}
       {mode === "text" && (
         <div className="generator-container fade-in">
-          <Button className="back-button" onClick={handleBack}>
-            ← Back
-          </Button>
-          <h2>Generate a Text Message</h2>
+          <h2>Generate A Text Message</h2>
           <h3>What should the message format be?</h3>
           <Dropdown
             label={textFormat}
@@ -176,6 +240,15 @@ function GenerateSection() {
             ]}
             onSelect={setTextFormat}
           />
+          {textFormat === "Custom..." && (
+            <input
+              className="custom-input"
+              type="text"
+              placeholder="Enter custom format..."
+              value={customTextFormat}
+              onChange={(e) => setCustomTextFormat(e.target.value)}
+            />
+          )}
           <h3>What should the message tone be?</h3>
           <Dropdown
             label={toneLabel}
@@ -189,17 +262,28 @@ function GenerateSection() {
             ]}
             onSelect={setToneLabel}
           />
-          <Button onClick={handleGenerateText}>Generate!</Button>
+          {toneLabel === "Custom..." && (
+            <input
+              className="custom-input"
+              type="text"
+              placeholder="Enter custom tone..."
+              value={customTone}
+              onChange={(e) => setCustomTone(e.target.value)}
+            />
+          )}
+          <Button onClick={handleGenerateText} disabled={loading}>
+            {loading ? "Generating..." : "Generate!"}
+          </Button>{" "}
+          <Button className="back-button" onClick={handleBack}>
+            ← Back to selection
+          </Button>
         </div>
       )}
 
       {/* Voice message generator */}
       {mode === "voice" && (
         <div className="generator-container fade-in">
-          <Button className="back-button" onClick={handleBack}>
-            ← Back
-          </Button>
-          <h2>Generate a Voice Message</h2>
+          <h2>Generate A Voice Message</h2>
           <h3>What should the message format be?</h3>
           <Dropdown
             label={voiceFormat}
@@ -213,6 +297,15 @@ function GenerateSection() {
             ]}
             onSelect={setVoiceFormat}
           />
+          {voiceFormat === "Custom..." && (
+            <input
+              className="custom-input"
+              type="text"
+              placeholder="Enter custom voice format..."
+              value={customVoiceFormat}
+              onChange={(e) => setCustomVoiceFormat(e.target.value)}
+            />
+          )}
           <h3>What should the voice be?</h3>
           <Dropdown
             label={voice}
@@ -226,7 +319,21 @@ function GenerateSection() {
             ]}
             onSelect={setVoice}
           />
-          <Button onClick={handleGenerateVoice}>Generate!</Button>
+          {voice === "Custom..." && (
+            <input
+              className="custom-input"
+              type="text"
+              placeholder="Enter custom voice..."
+              value={customVoice}
+              onChange={(e) => setCustomVoice(e.target.value)}
+            />
+          )}
+          <Button onClick={handleGenerateVoice} disabled={loading}>
+            {loading ? "Generating..." : "Generate!"}
+          </Button>{" "}
+          <Button className="back-button" onClick={handleBack}>
+            ← Back
+          </Button>
         </div>
       )}
     </section>

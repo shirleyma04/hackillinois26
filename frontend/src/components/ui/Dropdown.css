@@ -52,8 +52,7 @@
 
 /* Hover / Active / Focus */
 .dropdown-button:hover,
-.dropdown-button:active,
-.dropdown-button:focus {
+.dropdown-button:active {
   background-color: var(--color-secondary) !important;
   color: var(--color-primary) !important;
   box-shadow: none !important;
