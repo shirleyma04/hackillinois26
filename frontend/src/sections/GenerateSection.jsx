@@ -48,6 +48,80 @@
       setHasGenerated(false);
       setCachedVoiceId(null);
     };
+    return mapping[label] || label.toLowerCase();
+  };
+
+  const mapVoicePersonality = (label) => {
+    const mapping = {
+      British: "british",
+      "Wise Old Wizard": "wise_wizard",
+      "Teenage Girl": "teenage_girl",
+      "Corporate Executive": "corporate_executive",
+      "Cocky Villain": "cocky_villain",
+      "My Own Voice": "my_own_voice",
+    };
+    return mapping[label] || label.toLowerCase();
+  };
+
+  const handleTextFormatSelect = (selected) => {
+    setTextFormat(selected);
+    setSelectedFormat(mapSelectedFormat(selected));
+  };
+
+  const getFormatComingSoonMessage = () => {
+    if (textFormat === "Select format..." || textFormat === "Email") {
+      return null;
+    }
+    const label = textFormat === "Custom..." ? "Custom" : textFormat;
+    return `Feature to send '${label}' is coming soon...`;
+  };
+
+  const flashError = (msg) => {
+    setError(msg);
+    setErrorKey((key) => key + 1);
+    setTimeout(() => setError(null), 1500);
+  };
+
+  const validateTextFields = () => {
+    if (
+      !message ||
+      !angry_at ||
+      textFormat === "Select format..." ||
+      toneLabel === "Select tone..."
+    ) {
+      flashError("!! FILL OUT ALL FIELDS !!");
+      return false;
+    }
+    return true;
+  };
+
+  const validateVoiceFields = () => {
+    if (
+      !message ||
+      !angry_at ||
+      voiceFormat === "Select format..." ||
+      voice === "Select voice..."
+    ) {
+      flashError("!! FILL OUT ALL FIELDS !!");
+      return false;
+    }
+    return true;
+  };
+
+  const handleGenerateText = async () => {
+    if (!validateTextFields()) return;
+
+    setLoading(true);
+    setTransformedMessage("");
+    try {
+      const payload = {
+        message,
+        angry_at,
+        tone: toneLabel === "Custom..." ? customTone : mapTone(toneLabel),
+        format:
+          textFormat === "Custom..." ? customTextFormat : mapFormat(textFormat),
+        kindness_scale: kindness,
+        profanity_check: "censored",
 
     const mapTone = (label) =>
       ({
@@ -353,120 +427,145 @@
       }
     };
 
-    return (
-      <section className="generate-section">
-        {!mode && (
-          <div className="choice-buttons">
-            <Button onClick={() => setMode("text")}>
-              Generate a text message for me.
-            </Button>
-            <Button onClick={() => setMode("voice")}>
-              Generate a voice message for me.
-            </Button>
-          </div>
-        )}
+      const ttsData = await ttsResponse.json();
+      setTtsFilePath(ttsData.file_path);
 
-        {mode === "text" && (
-          <div className="generator-container fade-in">
-            <h2>Generate A Text Message</h2>
-            <h3>Message Format</h3>
-            <Dropdown
-              label={textFormat}
-              options={[
-                "Email",
-                "Text Message",
-                "Social Media Post",
-                "Review",
-                "Custom...",
-              ]}
-              onSelect={handleTextFormatSelect}
-            />
-            {getFormatComingSoonMessage() ? (
-              <p className="format-helper-text">{getFormatComingSoonMessage()}</p>
-            ) : null}
-            {textFormat === "Custom..." && (
-              <input
-                className="custom-input"
-                type="text"
-                placeholder="Enter custom format..."
-                value={customTextFormat}
-                onChange={(e) => setCustomTextFormat(e.target.value)}
-              />
-            )}
-            <h3>Message Tone</h3>
-            <Dropdown
-              label={toneLabel}
-              options={[
-                "Professional",
-                "Intimidating",
-                "Sarcastic",
-                "Condescending",
-                "Disappointed",
-                "Custom...",
-              ]}
-              onSelect={setToneLabel}
-            />
-            {toneLabel === "Custom..." && (
-              <input
-                className="custom-input"
-                type="text"
-                placeholder="Enter custom tone..."
-                value={customTone}
-                onChange={(e) => setCustomTone(e.target.value)}
-              />
-            )}
-            {error && (
-              <div key={errorKey} className="error-alert flash">
-                {error}
-              </div>
-            )}
-            <Button onClick={handleGenerateText} disabled={loading}>
-              {loading ? "Generating..." : "Generate!"}
-            </Button>
-            <Button className="back-button" onClick={handleBack}>
-              ← Back to selection
-            </Button>
-          </div>
-        )}
+      const audioUrl = `http://127.0.0.1:8000/${ttsData.file_path}`;
+      const audio = new Audio(audioUrl);
+      audio.play();
 
-        {mode === "voice" && (
-          <div className="generator-container fade-in">
-            <h2>Generate A Voice Message</h2>
-            <h3>Message Format</h3>
-            <Dropdown
-              label={voiceFormat}
-              options={[
-                "Rap",
-                "Cursed Spell",
-                "Shakespearean Monologue",
-                "Sports Announcement",
-                "Villain Monologue",
-                "Custom...",
-              ]}
-              onSelect={setVoiceFormat}
+      flashError("Voice generated! You can now download the MP3.");
+    } catch (err) {
+      flashError(err.message || "Failed to generate voice message");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <section className="generate-section">
+      {!mode && (
+        <div className="choice-buttons">
+          <Button onClick={() => setMode("text")}>
+            Generate a text message for me.
+          </Button>
+          <Button onClick={() => setMode("voice")}>
+            Generate a voice message for me.
+          </Button>
+        </div>
+      )}
+
+      {mode === "text" && (
+        <div className="generator-container fade-in">
+          <h2>Generate A Text Message</h2>
+          <h3>What should the message format be?</h3>
+          {getFormatComingSoonMessage() ? (
+            <p className="format-helper-text">{getFormatComingSoonMessage()}</p>
+          ) : null}
+          <Dropdown
+            label={textFormat}
+            options={[
+              "Email",
+              "Text Message",
+              "Social Media Post",
+              "Review",
+              "Custom...",
+            ]}
+            onSelect={handleTextFormatSelect}
+          />
+
+          {textFormat === "Custom..." && (
+            <input
+              className="custom-input"
+              type="text"
+              placeholder="Enter custom format..."
+              value={customTextFormat}
+              onChange={(e) => setCustomTextFormat(e.target.value)}
             />
-            {voiceFormat === "Custom..." && (
-              <input
-                className="custom-input"
-                type="text"
-                placeholder="Enter custom voice format..."
-                value={customVoiceFormat}
-                onChange={(e) => setCustomVoiceFormat(e.target.value)}
-              />
-            )}
-            <h3>Voice</h3>
-            <Dropdown
-              label={voice}
-              options={[
-                "My Own Voice",
-                "British",
-                "Wise Old Wizard",
-                "Teenage Girl",
-                "Corporate Executive",
-                "Cocky Villain",
-                "Custom...",
-              ]}
-              onSelect={setVoice}
+          )}
+          <h3>What should the message tone be?</h3>
+          <Dropdown
+            label={toneLabel}
+            options={[
+              "Professional",
+              "Intimidating",
+              "Sarcastic",
+              "Condescending",
+              "Disappointed",
+              "Custom...",
+            ]}
+            onSelect={setToneLabel}
+          />
+          {toneLabel === "Custom..." && (
+            <input
+              className="custom-input"
+              type="text"
+              placeholder="Enter custom tone..."
+              value={customTone}
+              onChange={(e) => setCustomTone(e.target.value)}
+            />
+          )}
+          {error && (
+            <div key={errorKey} className="error-alert flash">
+              {error}
+            </div>
+          )}
+          <Button onClick={handleGenerateText} disabled={loading}>
+            {loading ? "Generating..." : "Generate!"}
+          </Button>
+          <Button className="back-button" onClick={handleBack}>
+            ← Back to selection
+          </Button>
+        </div>
+      )}
+
+      {mode === "voice" && (
+        <div className="generator-container fade-in">
+          <h2>Generate A Voice Message</h2>
+          <h3>What should the message format be?</h3>
+          <Dropdown
+            label={voiceFormat}
+            options={[
+              "Rap",
+              "Cursed Spell",
+              "Shakespearean Monologue",
+              "Sports Announcement",
+              "Villain Monologue",
+              "Custom...",
+            ]}
+            onSelect={setVoiceFormat}
+          />
+          {voiceFormat === "Custom..." && (
+            <input
+              className="custom-input"
+              type="text"
+              placeholder="Enter custom voice format..."
+              value={customVoiceFormat}
+              onChange={(e) => setCustomVoiceFormat(e.target.value)}
+            />
+          )}
+          <h3>What should the voice be?</h3>
+          <Dropdown
+            label={voice}
+            options={[
+              "My Own Voice",
+              "British",
+              "Wise Old Wizard",
+              "Teenage Girl",
+              "Corporate Executive",
+              "Cocky Villain",
+              "My Own Voice",
+              "Custom...",
+            ]}
+            onSelect={setVoice}
+          />
+          {voice === "Custom..." && (
+            <input
+              className="custom-input"
+              type="text"
+              placeholder="Enter custom voice..."
+              value={customVoice}
+              onChange={(e) => setCustomVoice(e.target.value)}
             />
             {voice === "Custom..." && (
               <input
