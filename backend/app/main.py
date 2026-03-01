@@ -1,43 +1,43 @@
-  # SHARED - Main FastAPI application
+# SHARED - Main FastAPI application
 
-  from fastapi import FastAPI
-  from fastapi.middleware.cors import CORSMiddleware
-  from app.routers import transform, tts, voices, music
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from app.routers import transform, tts, voices, music
 
-  app = FastAPI(
-      title="Crash Out",
-      description="Transform angry messages with AI",
-      version="1.0.0"
-  )
+app = FastAPI(
+    title="Crash Out",
+    description="Transform angry messages with AI",
+    version="1.0.0"
+)
 
-  app.add_middleware(
-      CORSMiddleware,
-      allow_origins=["*"],
-      allow_credentials=True,
-      allow_methods=["*"],
-      allow_headers=["*"],
-  )
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
-  # TEXT backend
-  app.include_router(
-      transform.router,
-      prefix="/api/transform",
-      tags=["text-transformation"]
-  )
+# TEXT backend
+app.include_router(
+    transform.router,
+    prefix="/api/transform",
+    tags=["text-transformation"]
+)
 
-  # VOICE backend
-  app.include_router(tts.router, tags=["voice"])
-  app.include_router(voices.router, tags=["voice"])
-  app.include_router(music.router, tags=["voice"])
+# VOICE backend
+app.include_router(tts.router, tags=["voice"])
+app.include_router(voices.router, tags=["voice"])
+app.include_router(music.router, tags=["voice"])
 
-  @app.get("/")
-  async def root():
-      """Health check endpoint"""
-      return {
-          "message": "Crash Out API is running!",
-          "status": "healthy",
-          "endpoints": {
-              "text": "/api/transform",
-              "voice": "/api/tts"
-          }
-      }
+@app.get("/")
+async def root():
+    """Health check endpoint"""
+    return {
+        "message": "Crash Out API is running!",
+        "status": "healthy",
+        "endpoints": {
+            "text": "/api/transform",
+            "voice": "/api/tts"
+        }
+    }

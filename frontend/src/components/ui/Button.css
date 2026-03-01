@@ -24,6 +24,13 @@
   border: 2.5px solid var(--color-primary);
 }
 
+/* Active/Selected state */
+.btn.active {
+  background-color: var(--color-secondary);
+  color: var(--color-primary);
+  border: 2.5px solid var(--color-primary);
+}
+
 /* Disabled state */
 .btn:disabled {
   opacity: 0.5;

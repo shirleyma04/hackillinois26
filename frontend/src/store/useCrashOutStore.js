@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-  export const useCrashOutStore = create((set) => ({
+export const useCrashOutStore = create((set) => ({
     // Input fields
     message: "",
     angry_at: "",
@@ -8,6 +8,7 @@ import { create } from "zustand";
     format: "",
     profanity_check: "censored",
     kindness: 3,
+    kindnessRaw: 3,
 
     // Output
     transformedMessage: "",
@@ -25,10 +26,9 @@ import { create } from "zustand";
     setProfanityCheck: (profanity_check) => set({ profanity_check }),
     setKindness: (kindness) => {
       const numeric = Number(kindness);
-      const bounded = Number.isFinite(numeric)
-        ? Math.min(5, Math.max(1, Math.round(numeric)))
-        : 3;
-      set({ kindness: bounded });
+      const raw = Number.isFinite(numeric) ? Math.min(5, Math.max(1, numeric)) : 3;
+      const rounded = Math.round(raw);
+      set({ kindness: rounded, kindnessRaw: raw });
     },
 
     // Output setters
