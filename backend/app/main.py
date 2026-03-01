@@ -4,6 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.routers import transform, tts, voices, music
 from fastapi.staticfiles import StaticFiles
+import os
 
 app = FastAPI(
     title="Crash Out",
