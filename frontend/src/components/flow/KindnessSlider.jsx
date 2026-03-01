@@ -14,6 +14,7 @@ function KindnessSlider({ value, onChange }) {
   const kindness = useCrashOutStore((state) => state.kindness);
   const kindnessRaw = useCrashOutStore((state) => state.kindnessRaw);
   const setKindness = useCrashOutStore((state) => state.setKindness);
+  const stopAudio = useCrashOutStore((state) => state.stopAudio);
   const [sliderValue, setSliderValue] = useState(value || 3);
 
   const resolvedRawValue = value ?? kindnessRaw ?? kindness ?? sliderValue;
@@ -21,6 +22,10 @@ function KindnessSlider({ value, onChange }) {
 
   const handleChange = (e) => {
     const val = parseFloat(e.target.value);
+
+    // Stop any playing audio when slider moves
+    stopAudio();
+
     setSliderValue(val);
     setKindness(val);
     if (onChange) onChange(Math.min(5, Math.max(1, Math.round(val))));
