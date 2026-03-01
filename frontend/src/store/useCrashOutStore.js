@@ -13,6 +13,7 @@ export const useCrashOutStore = create((set) => ({
     // Output
     transformedMessage: "",
     profanityDetected: false,
+    audioFilePath: "",
 
     // UI state
     isLoading: false,
@@ -34,6 +35,7 @@ export const useCrashOutStore = create((set) => ({
     // Output setters
     setTransformedMessage: (transformedMessage) => set({ transformedMessage }),
     setProfanityDetected: (profanityDetected) => set({ profanityDetected }),
+    setAudioFilePath: (audioFilePath) => set({ audioFilePath }),
 
     // UI state setters
     setLoading: (isLoading) => set({ isLoading }),
