@@ -6,8 +6,6 @@ import Button from "../components/ui/Button.jsx";
 import "./GenerateSection.css";
 
 function GenerateSection() {
-  const API_BASE = import.meta.env.VITE_API_BASE_URL;
-
   const [mode, setMode] = useState(null);
   const [textFormat, setTextFormat] = useState("Select format...");
   const [toneLabel, setToneLabel] = useState("Select tone...");
@@ -27,9 +25,7 @@ function GenerateSection() {
 
   const setTtsFilePath = useCrashOutStore((state) => state.setTtsFilePath);
   const setFormat = useCrashOutStore((state) => state.setFormat);
-  const setSelectedFormat = useCrashOutStore(
-    (state) => state.setSelectedFormat,
-  );
+  const setSelectedFormat = useCrashOutStore((state) => state.setSelectedFormat);
   const setTone = useCrashOutStore((state) => state.setTone);
   const setError = useCrashOutStore((state) => state.setError);
   const setTransformedMessage = useCrashOutStore(
@@ -220,7 +216,7 @@ function GenerateSection() {
         return;
       }
 
-      const ttsResponse = await fetch(`${API_BASE}/tts/`, {
+      const ttsResponse = await fetch("http://127.0.0.1:8000/tts/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
