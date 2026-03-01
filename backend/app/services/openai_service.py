@@ -8,7 +8,7 @@ class OpenAIService:
         self.client = AsyncOpenAI(api_key=settings.openai_api_key)
         self.model = settings.openai_model
 
-    def _build_system_prompt(self, angry_at: str, format: str, tone: str, kindness_scale: int, profanity_check: str = "none", message_length: int = 0) -> str:
+    def _build_system_prompt(self, angry_at: str, format: str, tone: str, kindness_scale: int, profanity_check: str = "none", message_length: int = 0, voice_format: str = None, voice_personality: str = None) -> str:   
         """Build dynamic system prompt based on user preferences."""
         base_prompt = "You are an expert communication specialist who transforms angry, frustrated, disappointed, and annoyed messages into a message with increased or decreased intensity levels of emotion. This emotion intensity level is set by kindness_scale. \n\n"
         base_prompt += "Important: The intent of the transformation of the message is for both practical and comedic use. The common use is that It allows for the venting of an unfiltered message with varying levels of emotion, and the transformation allows it to be restructured with the intention of sending it a person specified by angry_at. \n"
@@ -79,6 +79,33 @@ class OpenAIService:
         else:  # kindness_scale == 5
             base_prompt += "Be VERY kind, polite, and constructive. Use very gentle language and extremely positive framing. Maximum kindness.\n"
 
+         # Voice-specific formatting
+        if voice_format:
+            base_prompt += f"\nVoice Format: {voice_format}\n"
+            if voice_format == "rap":
+                base_prompt += "Transform into rap verse format with rhyme scheme, rhythm, and flow. Keep it punchy and lyrical.\n"
+            elif voice_format == "cursed_spell":
+                base_prompt += "Write as an ancient curse or spell - mystical, dramatic, with archaic language and foreboding tone.\n"
+            elif voice_format == "shakespearean":
+                base_prompt += "Use Shakespearean English with thee/thou, dramatic monologue style, poetic and theatrical.\n"
+            elif voice_format == "sports_announcement":
+                base_prompt += "Write like a sports announcer - high energy, play-by-play style, excited commentary.\n"
+            elif voice_format == "villain_monologue":
+                base_prompt += "Deliver as a theatrical villain monologue - dramatic, menacing, with grand declarations.\n"
+
+        if voice_personality:
+            base_prompt += f"\nVoice Personality: {voice_personality}\n"
+            if voice_personality == "british":
+                base_prompt += "Use British speech patterns, sophisticated vocabulary, proper and refined tone.\n"
+            elif voice_personality == "wise_wizard":
+                base_prompt += "Speak as a wise old wizard - mystical, knowing, with cryptic wisdom and ancient knowledge.\n"
+            elif voice_personality == "teenage_girl":
+                base_prompt += "Use teenage girl speech patterns - casual, expressive, with modern slang and enthusiasm.\n"
+            elif voice_personality == "corporate_executive":
+                base_prompt += "Professional corporate tone - assertive, business-focused, direct and commanding.\n"
+            elif voice_personality == "cocky_villain":
+                base_prompt += "Arrogant and overconfident - smug, theatrical, reveling in superiority.\n"
+
         base_prompt += f"\nFormat: {format}\n"
 
         if format == "email":
@@ -119,18 +146,20 @@ class OpenAIService:
         return base_prompt
 
     async def transform_message(
-        self,
-        message: str,
-        angry_at: str,
-        format: str,
-        tone: str,
-        kindness_scale: int,
-        profanity_check: str = "none"
-    ) -> str:
+      self,
+      message: str,
+      angry_at: str,
+      format: str,
+      tone: str,
+      kindness_scale: int,
+      profanity_check: str = "none",
+      voice_format: str = None,
+      voice_personality: str = None
+     ) -> str:
         """Transform the user's message using OpenAI."""
         try:
             message_length = len(message)
-            system_prompt = self._build_system_prompt(angry_at, format, tone, kindness_scale, profanity_check, message_length)
+            system_prompt = self._build_system_prompt(angry_at, format, tone, kindness_scale, profanity_check, message_length, voice_format, voice_personality)
 
             response = await self.client.chat.completions.create(
                 model=self.model,
