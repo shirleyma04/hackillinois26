@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useCrashOutStore } from "../store/useCrashOutStore";
 import { transformService } from "../services/transformService";
 import Dropdown from "../components/ui/Dropdown.jsx";
@@ -16,11 +16,13 @@ function GenerateSection() {
   const [customVoiceFormat, setCustomVoiceFormat] = useState("");
   const [customVoice, setCustomVoice] = useState("");
   const [loading, setLoading] = useState(false);
+  const [errorKey, setErrorKey] = useState(0); // trigger re-render for flash animation
 
-  // Get state from Zustand store
+  // Zustand state
   const message = useCrashOutStore((state) => state.message);
   const angry_at = useCrashOutStore((state) => state.angry_at);
   const kindness = useCrashOutStore((state) => state.kindness);
+  const error = useCrashOutStore((state) => state.error); // subscribe to error changes
   const setTtsFilePath = useCrashOutStore((state) => state.setTtsFilePath);
 
   // Get setters
@@ -37,44 +39,64 @@ function GenerateSection() {
   const handleBack = () => setMode(null);
 
   // Map UI labels to backend values
-  const mapTone = (label) => {
-    const mapping = {
+  const mapTone = (label) =>
+    ({
       Professional: "professional",
       Intimidating: "intimidating",
       Sarcastic: "sarcastic",
       Condescending: "condescending",
       Disappointed: "disappointed",
-    };
-    return mapping[label] || label.toLowerCase();
-  };
+    })[label] || label.toLowerCase();
 
-  const mapFormat = (label) => {
-    const mapping = {
+  const mapFormat = (label) =>
+    ({
       Email: "email",
       "Text Message": "text",
       "Social Media Post": "social_media",
       Review: "review",
       Custom: "custom",
-    };
-    return mapping[label] || label.toLowerCase();
+    })[label] || label.toLowerCase();
+
+  // Flash error with slight animation
+  const flashError = (msg) => {
+    setError(msg);
+    setErrorKey((k) => k + 1); // trigger animation re-render
+    setTimeout(() => setError(null), 1500);
   };
 
-  // Handle TEXT generation
-  const handleGenerateText = async () => {
-    // Validation
+  // Validate fields on button click only
+  const validateTextFields = () => {
     if (
       !message ||
       !angry_at ||
       textFormat === "Select format..." ||
       toneLabel === "Select tone..."
     ) {
-      setError("Please fill in all fields (message, target, format, tone)");
-      return;
+      flashError("!! FILL OUT ALL FIELDS !!");
+      return false;
     }
+    return true;
+  };
 
-    setError(null);
-    setLoading(true); // START loading
+  const validateVoiceFields = () => {
+    if (
+      !message ||
+      !angry_at ||
+      voiceFormat === "Select format..." ||
+      voice === "Select voice..."
+    ) {
+      flashError("!! FILL OUT ALL FIELDS !!");
+      return false;
+    }
+    return true;
+  };
 
+  // Handle TEXT generation
+  const handleGenerateText = async () => {
+    if (!validateTextFields()) return;
+
+    setLoading(true);
+    setTransformedMessage("");
     try {
       const payload = {
         message,
@@ -85,26 +107,20 @@ function GenerateSection() {
         profanity_check: "censored",
       };
 
-      console.log("TEXT - Sending payload:", payload);
-
-      // Store format and tone in global state
       setFormat(mapFormat(textFormat));
       setTone(mapTone(toneLabel));
 
       const result = await transformService(payload);
-
-      console.log("TEXT - Received result:", result);
-
       setTransformedMessage(result.transformed_message);
       setProfanityDetected(result.profanity_detected);
     } catch (err) {
-      console.error("TEXT - Transform error:", err);
-      setError(err.message || "Failed to transform message");
+      flashError(err.message || "Failed to transform message");
     } finally {
       setLoading(false);
     }
   };
 
+  // Handle VOICE generation
   const voiceIdMap = {
     "British": "P4DhdyNCB4Nl6MA0sL45",
     "Wise Old Wizard": "0rEo3eAjssGDUCXHYENf",
@@ -115,42 +131,26 @@ function GenerateSection() {
 
   // Handle VOICE generation (TEXT transform + TTS)
   const handleGenerateVoice = async () => {
-    // Validation
-    if (
-      !message ||
-      !angry_at ||
-      voiceFormat === "Select format..." ||
-      voice === "Select voice..."
-    ) {
-      setError(
-        "Please fill in all fields (message, target, voice format, voice)",
-      );
-      return;
-    }
+    if (!validateVoiceFields()) return;
 
-    setError(null);
-
+    setLoading(true);
+    setTransformedMessage("");
     try {
-      // Step 1: Transform the message first (using text format "text" for voice)
       const transformPayload = {
         message,
         angry_at,
-        tone: "professional", // Default tone for voice (can be customized later)
-        format: "text", // Use text format for voice output
+        tone: "professional",
+        format: "text",
         kindness_scale: kindness,
         profanity_check: "censored",
       };
-
-      console.log("VOICE - Step 1: Transforming message:", transformPayload);
-
       const transformResult = await transformService(transformPayload);
-
-      console.log("VOICE - Step 1 Complete:", transformResult);
-
-      // Store the transformed message
       setTransformedMessage(transformResult.transformed_message);
       setProfanityDetected(transformResult.profanity_detected);
 
+      flashError(
+        "Voice generated! (Audio playback coming soon - TTS integration needed)",
+      );
       // Step 2: Generate speech from transformed message
       console.log("VOICE - Step 2: Generating speech (TTS)...");
 
@@ -208,14 +208,14 @@ function GenerateSection() {
       // setError("Voice generated! (Audio playback coming soon - TTS integration needed)");
 
     } catch (err) {
-      console.error("VOICE - Error:", err);
-      setError(err.message || "Failed to generate voice message");
+      flashError(err.message || "Failed to generate voice message");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <section className="generate-section">
-      {/* Choice buttons */}
       {!mode && (
         <div className="choice-buttons">
           <Button onClick={() => setMode("text")}>
@@ -227,11 +227,10 @@ function GenerateSection() {
         </div>
       )}
 
-      {/* Text message generator */}
       {mode === "text" && (
         <div className="generator-container fade-in">
           <h2>Generate A Text Message</h2>
-          <h3>What should the message format be?</h3>
+          <h3>Message Format</h3>
           <Dropdown
             label={textFormat}
             options={[
@@ -252,7 +251,7 @@ function GenerateSection() {
               onChange={(e) => setCustomTextFormat(e.target.value)}
             />
           )}
-          <h3>What should the message tone be?</h3>
+          <h3>Message Tone</h3>
           <Dropdown
             label={toneLabel}
             options={[
@@ -274,20 +273,24 @@ function GenerateSection() {
               onChange={(e) => setCustomTone(e.target.value)}
             />
           )}
+          {error && (
+            <div key={errorKey} className="error-alert flash">
+              {error}
+            </div>
+          )}
           <Button onClick={handleGenerateText} disabled={loading}>
             {loading ? "Generating..." : "Generate!"}
-          </Button>{" "}
+          </Button>
           <Button className="back-button" onClick={handleBack}>
             ← Back to selection
           </Button>
         </div>
       )}
 
-      {/* Voice message generator */}
       {mode === "voice" && (
         <div className="generator-container fade-in">
           <h2>Generate A Voice Message</h2>
-          <h3>What should the message format be?</h3>
+          <h3>Message Format</h3>
           <Dropdown
             label={voiceFormat}
             options={[
@@ -309,10 +312,11 @@ function GenerateSection() {
               onChange={(e) => setCustomVoiceFormat(e.target.value)}
             />
           )}
-          <h3>What should the voice be?</h3>
+          <h3>Voice</h3>
           <Dropdown
             label={voice}
             options={[
+              "My Own Voice",
               "British",
               "Wise Old Wizard",
               "Teenage Girl",
@@ -331,9 +335,14 @@ function GenerateSection() {
               onChange={(e) => setCustomVoice(e.target.value)}
             />
           )}
+          {error && (
+            <div key={errorKey} className="error-alert flash">
+              {error}
+            </div>
+          )}
           <Button onClick={handleGenerateVoice} disabled={loading}>
             {loading ? "Generating..." : "Generate!"}
-          </Button>{" "}
+          </Button>
           <Button className="back-button" onClick={handleBack}>
             ← Back
           </Button>
