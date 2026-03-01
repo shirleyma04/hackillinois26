@@ -19,6 +19,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Serve built frontend
+frontend_path = os.path.join(os.path.dirname(__file__), "static")
+app.mount("/", StaticFiles(directory=frontend_path, html=True), name="frontend")
+
+
 # TEXT backend
 app.include_router(
     transform.router,
