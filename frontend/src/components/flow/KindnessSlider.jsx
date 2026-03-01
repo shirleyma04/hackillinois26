@@ -47,11 +47,10 @@ function KindnessSlider({ value, onChange }) {
         />
       </div>
 
-      <div className="kindness-readout">Kindness: {resolvedBucket}/5</div>
-
-      <div className="slider-end-labels kindnessLabels">
-        <span className="label kindnessLabel--meaner">Make it meaner</span>
-        <span className="label kindnessLabel--nicer">Make it nicer</span>
+      <div className="kindness-inline-row">
+        <span className="kindness-inline-item">Kindness: {resolvedBucket}/5</span>
+        <span className="kindness-inline-item">Make it meaner</span>
+        <span className="kindness-inline-item">Make it nicer</span>
       </div>
     </div>
   );

@@ -69,52 +69,18 @@
   border: 0;
 }
 
-.slider-end-labels {
-  display: flex;
-  justify-content: space-between;
+.kindness-inline-row {
   width: 100%;
-  margin-top: -35px;
-}
-
-.kindnessLabels {
-  align-items: center;
   margin-top: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
 }
 
-.slider-end-labels .label:first-child {
-  transform: translateX(-77px);
-}
-
-.slider-end-labels .label:last-child {
-  transform: translateX(77px);
-}
-
-.kindnessLabel--meaner {
-  color: var(--text-secondary);
-}
-
-.kindnessLabel--nicer {
-  color: var(--text-primary);
-}
-
-[data-theme="dark"] .kindnessLabel--meaner {
-  color: var(--text-secondary);
-  opacity: 0.9;
-}
-
-[data-theme="dark"] .kindnessLabel--nicer {
-  color: var(--text-primary);
-  opacity: 1;
-  text-shadow: 0 0 10px color-mix(in oklab, var(--text-primary) 35%, transparent);
-}
-
-.kindness-readout {
+.kindness-inline-item {
   font-size: 14px;
-  color: var(--text-secondary);
-  margin-bottom: 8px;
-}
-
-.label {
-  font-size: 16px;
+  color: var(--text-primary);
   text-align: center;
+  white-space: nowrap;
 }
