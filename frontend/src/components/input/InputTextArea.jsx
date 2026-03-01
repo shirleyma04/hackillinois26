@@ -6,7 +6,6 @@ import "./InputTextArea.css";
 function InputTextArea() {
   const message = useCrashOutStore((state) => state.message);
   const setMessage = useCrashOutStore((state) => state.setMessage);
-
   const [listening, setListening] = useState(false);
   const recognitionRef = useRef(null);
   const finalTranscriptRef = useRef("");
