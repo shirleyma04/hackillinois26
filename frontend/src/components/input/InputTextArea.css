@@ -23,7 +23,7 @@
   font-family: var(--font-primary);
   font-size: 1rem;
   line-height: 1.2em;
-  color: var(--text-primary);
+  color: var(--font-tertiary);
   background-color: var(--bg-card);
   border: 2px solid var(--color-primary);
   border-radius: var(--radius-md);
