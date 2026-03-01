@@ -37,4 +37,5 @@ def generate_music(request: MusicRequest):
     with open(file_path, "wb") as f:
         f.write(audio_bytes)
 
-    return {"file_path": file_path}
+    # return {"file_path": file_path}
+    return {"file_path": f"generated_music/{filename}"}

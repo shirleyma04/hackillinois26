@@ -51,6 +51,26 @@ function GenerateSection() {
     (state) => state.setLastGenerationParams,
   );
 
+  const buildRapPrompt = ({ angryAt, message }) => {
+      return `
+    Create a high-energy hip-hop rap track with aggressive trap drums beats, heavy 808 bass, and a fast tempo.
+
+    Vocal style:
+    Confident, bold, confrontational delivery with sharp, punchy, rhyming lyrics.
+
+    Lyrics theme:
+    The rapper is confronting a ${angryAt} and expressing frustration about: "${message}"
+
+    Requirements:
+    - Short punchy bars
+    - Strong rhyme scheme
+    - Empowerment and confidence
+    - Memorable hook
+    - Clean but intense attitude
+    - Dramatic ending beat drop
+    `;
+    };
+
   const handleBack = () => {
     setMode(null);
     setHasGenerated(false);
@@ -212,13 +232,59 @@ function GenerateSection() {
     setLoading(true);
     // setTransformedMessage("");
     try {
+      const mappedVoiceFormat =
+      voiceFormat === "Custom..."
+        ? customVoiceFormat
+        : mapVoiceFormat(voiceFormat);
+      
+      const isRapMusic = mode === "voice" && mapVoiceFormat(voiceFormat) === "rap";
+
+      // 🎤 RAP MUSIC MODE
+      if (mappedVoiceFormat === "rap") {
+        try {
+          const rapPrompt = buildRapPrompt({
+            angryAt: angry_at,
+            message,
+          });
+
+          console.log(rapPrompt);
+
+          const response = await fetch("http://127.0.0.1:8000/music/generate", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              prompt: rapPrompt,
+              duration_ms: 20000, // ✅ 20 seconds
+            }),
+          });
+
+          if (!response.ok) {
+            throw new Error("Rap generation failed");
+          }
+
+          const data = await response.json();
+
+          setTtsFilePath(data.file_path);
+
+          const audioUrl = `http://127.0.0.1:8000/${data.file_path}`;
+          const audio = new Audio(audioUrl);
+          setCurrentAudio(audio);
+          audio.play();
+
+          setHasGenerated(true);
+          flashError("Rap generated! You can download the track.");
+          setLoading(false);
+          return; // 🚨 stop normal TTS flow
+        } catch (err) {
+          flashError(err.message || "Failed to generate rap");
+          setLoading(false);
+          return;
+        }
+      }
+
       // Determine tone based on default kindness (3) for initial generation
       let dynamicTone = "disappointed"; // kindness 3 = disappointed tone
 
-      const mappedVoiceFormat =
-        voiceFormat === "Custom..."
-          ? customVoiceFormat
-          : mapVoiceFormat(voiceFormat);
       const mappedVoicePersonality =
         voice === "Custom..." ? customVoice : mapVoicePersonality(voice);
 
