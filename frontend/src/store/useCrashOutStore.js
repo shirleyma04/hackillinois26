@@ -22,6 +22,9 @@ export const useCrashOutStore = create((set) => ({
     ttsFilePath: "",                  // <- new state
     setTtsFilePath: (ttsFilePath) => set({ ttsFilePath }), // <- setter
 
+    clonedVoiceId: null,
+    setClonedVoiceId: (clonedVoiceId) => set({ clonedVoiceId }),
+
     // Input setters
     setMessage: (message) => set({ message }),
     setAngryAt: (angry_at) => set({ angry_at }),

@@ -155,7 +155,17 @@ function GenerateSection() {
       console.log("VOICE - Step 2: Generating speech (TTS)...");
 
       // Step 2: Generate speech from transformed message
-      const selectedVoiceId = voiceIdMap[voice];
+      // const selectedVoiceId = voiceIdMap[voice];
+
+      const clonedVoiceId = useCrashOutStore.getState().clonedVoiceId;
+
+      let selectedVoiceId;
+
+      if (voice === "My Own Voice") {
+        selectedVoiceId = clonedVoiceId || "KZccS6E7T0Hp7OtFcE8A";
+      } else {
+        selectedVoiceId = voiceIdMap[voice];
+      }
 
       if (!selectedVoiceId) {
         setError("Invalid voice selected");
@@ -318,6 +328,7 @@ function GenerateSection() {
               "Teenage Girl",
               "Corporate Executive",
               "Cocky Villain",
+              "My Own Voice",
               "Custom...",
             ]}
             onSelect={setVoice}

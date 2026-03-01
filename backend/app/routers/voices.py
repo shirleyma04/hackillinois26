@@ -1,4 +1,7 @@
-from fastapi import APIRouter, HTTPException
+import os, uuid
+from fastapi import APIRouter, HTTPException, UploadFile, File, Form
+from typing import List, Optional
+from io import BytesIO
 from app.models.schemas import (
     VoiceSearchRequest, 
     VoiceSearchResponse, 
@@ -14,11 +17,13 @@ from app.services.elevenlabs_service import (
     search_shared_voices, 
     clone_voice,
     design_voice,
-    create_voice_from_preview
+    create_voice_from_preview,
 )
 
 router = APIRouter(prefix="/voices", tags=["Voices"])
 
+UPLOAD_DIR = "app/tmp_uploads"
+os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 @router.post("/search", response_model=VoiceSearchResponse)
 async def search_voices(request: VoiceSearchRequest):
@@ -54,16 +59,55 @@ async def search_voices(request: VoiceSearchRequest):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
-@router.post("/clone", response_model=VoiceCloneResponse)
-async def clone_voice_endpoint(request: VoiceCloneRequest):
+# @router.post("/clone", response_model=VoiceCloneResponse)
+# async def clone_voice_endpoint(request: VoiceCloneRequest):
+#     """
+#     Clone a voice using provided audio samples.
+#     """
+#     try:
+#         result = clone_voice(
+#             name=request.name,
+#             file_paths=request.file_paths
+#         )
+#         return result
+
+#     except Exception as e:
+#         raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/clone")
+async def clone_voice_endpoint(
+    name: str = Form(...),
+    files: Optional[List[UploadFile]] = File(None),
+    file_paths: Optional[List[str]] = Form(None),
+):
     """
-    Clone a voice using provided audio samples.
+    Clone voice from uploaded files OR file paths.
     """
+
     try:
-        result = clone_voice(
-            name=request.name,
-            file_paths=request.file_paths
-        )
+        paths = []
+
+        # ✅ Case 1: files uploaded from frontend
+        if files:
+            for file in files:
+                ext = file.filename.split(".")[-1]
+                temp_path = os.path.join(UPLOAD_DIR, f"{uuid.uuid4()}.{ext}")
+
+                with open(temp_path, "wb") as f:
+                    f.write(await file.read())
+
+                paths.append(temp_path)
+
+        # ✅ Case 2: file paths (existing behavior)
+        elif file_paths:
+            paths = file_paths
+
+        else:
+            raise HTTPException(status_code=400, detail="No audio provided")
+
+        # ✅ Call your service
+        result = clone_voice(name=name, file_paths=paths)
+
         return result
 
     except Exception as e:

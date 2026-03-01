@@ -70,10 +70,13 @@ const textareaRef = useRef(null);
         }
       };
 
-      mediaRecorder.onstop = () => {
+      mediaRecorder.onstop = async () => {
+
         const blob = new Blob(chunksRef.current, {
           type: mediaRecorder.mimeType || "audio/webm",
         });
+
+        const audioFile = new File([blob], "user_voice.webm", { type: blob.type });
 
         setRecordedAudioUrl((previousUrl) => {
           if (previousUrl) {
@@ -81,6 +84,16 @@ const textareaRef = useRef(null);
           }
           return URL.createObjectURL(blob);
         });
+
+        try {
+          const { setClonedVoiceId } = useCrashOutStore.getState();
+          const data = await cloneVoice(audioFile);
+          setClonedVoiceId(data.voice_id);
+
+          console.log("Saved voice ID:", data.voice_id);
+        } catch (err) {
+          console.error("Voice cloning failed:", err);
+        }
 
         chunksRef.current = [];
 
@@ -117,6 +130,32 @@ const textareaRef = useRef(null);
     if (recordedAudioUrl) {
       URL.revokeObjectURL(recordedAudioUrl);
       setRecordedAudioUrl(null);
+    }
+  };
+
+  const cloneVoice = async (audioFile) => {
+    const formData = new FormData();
+    formData.append("name", "User Cloned Voice");
+    formData.append("files", audioFile); // must match backend field name
+
+    try {
+      const response = await fetch("http://127.0.0.1:8000/voices/clone", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Voice cloning failed: ${errorText}`);
+      }
+
+      const data = await response.json();
+      console.log("Voice cloned:", data);
+
+      return data; // ✅ IMPORTANT — return response to caller
+    } catch (err) {
+      console.error("Clone error:", err);
+      throw err; // rethrow so caller can handle it
     }
   };
 
