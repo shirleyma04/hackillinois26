@@ -246,8 +246,7 @@
               // ElevenLabs requires text to be at least 100 characters for voice design
               let textForVoiceDesign = transformResult.transformed_message;
               if (textForVoiceDesign.length < 100) {
-                textForVoiceDesign = `${textForVoiceDesign} This is a sample demonstration message created for the purpose of voice 
-  generation and preview.`;
+                textForVoiceDesign = `${textForVoiceDesign} This is a sample demonstration message created for the purpose of voice generation and preview.`;
               }
 
               const designResponse = await fetch("http://127.0.0.1:8000/voices/design", {
@@ -495,3 +494,4 @@
     );
   }
 
+  export default GenerateSection;

@@ -268,10 +268,8 @@
         <h3>Want to make changes?</h3>
         <p style={{ fontSize: "0.9em", color: "#666", marginTop: "-10px", marginBottom: "15px" }}>
           {isVoiceMode
-            ? "Adjust the kindness slider below, or go back to change your message, angry at, voice format, or voice personality.
-  Then click 'Make the change'."
-            : "Adjust the kindness slider below, or go back to change your message, angry at, tone, or format. Then click 'Make the
-  change'."}
+            ? "Adjust the kindness slider below, or go back to change your message, angry at, voice format, or voice personality. Then click 'Make the change'."
+            : "Adjust the kindness slider below, or go back to change your message, angry at, tone, or format. Then click 'Make the change'."}
         </p>
         <KindnessSlider />
         <div
