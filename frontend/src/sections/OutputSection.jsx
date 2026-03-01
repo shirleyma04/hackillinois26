@@ -212,7 +212,7 @@ function OutputSection() {
       <div className="transformed-message">
         {loading
           ? `Generating your message${dots}`
-          : transformedMessage || "Your message will appear here."}
+          : transformedMessage || "Your message will appear here..."}
       </div>
 
       <h3>Want to change the kindness of your message?</h3>
