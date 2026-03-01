@@ -1,0 +1,54 @@
+.generate-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+/* Constrain text content to 80% of the container */
+.generator-container,
+.choice-buttons {
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.generator-container h2 {
+  width: 80%; /* text width 80% of container */
+  margin: 0 auto 6px auto;
+}
+
+.generator-container h3 {
+  width: 80%; /* text width 80% of container */
+  margin: 4px auto 0 auto;
+}
+
+/* Back button in top-left */
+.back-button {
+  align-self: flex-start;
+  background: none;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+  color: var(--color-tertiary);
+  margin: 0;
+}
+
+.back-button:hover {
+  color: var(--color-muted);
+}
+
+.back-button:focus {
+  outline: none;
+}
+
+/* Choice buttons stacked */
+.choice-buttons button {
+  width: 100%;
+}
+
+/* Apply to all Generate buttons inside generator-container */
+.generator-container > button:last-of-type {
+  margin-top: 8px;
+}

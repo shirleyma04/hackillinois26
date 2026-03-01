@@ -12,7 +12,6 @@ function Dropdown({ label: defaultLabel, options, onSelect }) {
         setOpen(false);
       }
     };
-
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
@@ -27,7 +26,7 @@ function Dropdown({ label: defaultLabel, options, onSelect }) {
     <div ref={dropdownRef} className="dropdown-container">
       <button
         className={`dropdown-button ${open ? "open" : ""} ${
-          selected && selected !== defaultLabel ? "chosen" : "default"
+          selected ? "chosen" : "default"
         }`}
         onClick={() => setOpen((prev) => !prev)}
       >

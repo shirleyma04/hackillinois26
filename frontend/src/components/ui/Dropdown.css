@@ -1,29 +1,33 @@
 .dropdown-container {
   position: relative;
   display: inline-block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .dropdown-button {
   padding: 8px 12px;
   font-family: var(--font-primary);
   font-size: 1rem;
-  border: 2px solid var(--color-primary);
+  border: 2.5px solid var(--color-primary);
   border-radius: var(--radius-md);
-  background: var(--color-primary);
-  color: var(--color-secondary);
   cursor: pointer;
-  width: 150px; /* or dynamic width */
+  height: 42px; /* enforce a fixed height */
   display: flex;
-  justify-content: space-between; /* label left, caret right */
+  justify-content: space-between;
   align-items: center;
   outline: none;
+  transition: all 0.2s ease;
 }
 
+/* Default state (no selection) */
 .dropdown-button.default {
   background-color: var(--color-primary);
   color: var(--color-secondary);
 }
 
+/* Chosen state (user selected an option) */
 .dropdown-button.chosen {
   background-color: var(--color-secondary);
   color: var(--color-primary);
@@ -33,7 +37,6 @@
   margin-left: 8px;
   font-size: 0.8rem;
   transition: transform 0.2s ease;
-  background: var(--color-primary);
 }
 
 /* rotate caret when dropdown is open */
@@ -41,22 +44,41 @@
   transform: rotate(180deg);
 }
 
+.dropdown-button:focus {
+  outline: none; /* removes default focus ring */
+  box-shadow: none; /* removes any shadow that some browsers apply */
+}
+
+/* Hover / Active / Focus */
+.dropdown-button:hover,
+.dropdown-button:active,
+.dropdown-button:focus {
+  background-color: var(--color-secondary) !important;
+  color: var(--color-primary) !important;
+  box-shadow: none !important;
+  border: 2.5px solid var(--color-primary);
+}
+
 .dropdown-menu {
   position: absolute;
   top: 100%;
-  left: 0;
+  left: 50%; /* move left edge to center */
+  transform: translateX(-50%); /* center it */
   color: var(--color-secondary);
   border: 2.5px solid var(--color-primary);
   border-radius: var(--radius-md);
-  min-width: 100%;
+  min-width: 170px; /* smaller than before */
+  max-width: 260px; /* menu width */
   z-index: 10;
   margin-top: 4px;
+  background: var(--color-primary);
 }
 
 .dropdown-item {
-  padding: 8px;
+  padding: 7px;
   cursor: pointer;
   background: var(--color-primary);
+  color: var(--color-secondary);
 }
 
 .dropdown-item:hover {
