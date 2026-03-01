@@ -21,6 +21,7 @@ function GenerateSection() {
   const message = useCrashOutStore((state) => state.message);
   const angry_at = useCrashOutStore((state) => state.angry_at);
   const kindness = useCrashOutStore((state) => state.kindness);
+  const setTtsFilePath = useCrashOutStore((state) => state.setTtsFilePath);
 
   // Get setters
   const setFormat = useCrashOutStore((state) => state.setFormat);
@@ -178,6 +179,8 @@ function GenerateSection() {
       const ttsData = await ttsResponse.json();
       console.log("VOICE - TTS result:", ttsData);
 
+      setTtsFilePath(ttsData.file_path);
+
       // 🎧 Play audio automatically
       const audioUrl = `http://127.0.0.1:8000/${ttsData.file_path}`;
       const audio = new Audio(audioUrl);
@@ -186,7 +189,7 @@ function GenerateSection() {
       // Optional: store audio URL in Zustand later
       // setAudioUrl(audioUrl);
 
-      setError(null);
+      setError("Voice generated! You can now download the MP3.");
 
       // TODO: Call TTS service
       // const ttsResult = await fetch('http://localhost:8000/tts/', {
@@ -201,7 +204,7 @@ function GenerateSection() {
       // const audioData = await ttsResult.json();
       // Store audio file path and play it
 
-      console.log("VOICE - TTS integration pending (your friend's work)");
+      // console.log("VOICE - TTS integration pending (your friend's work)");
       // setError("Voice generated! (Audio playback coming soon - TTS integration needed)");
 
     } catch (err) {
