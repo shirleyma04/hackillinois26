@@ -6,6 +6,7 @@ export const useCrashOutStore = create((set) => ({
     angry_at: "",
     tone: "",
     format: "",
+    selectedFormat: "",
     profanity_check: "censored",
     kindness: 3,
     kindnessRaw: 3,
@@ -13,6 +14,7 @@ export const useCrashOutStore = create((set) => ({
     // Output
     transformedMessage: "",
     profanityDetected: false,
+    audioFilePath: "",
 
     // UI state
     isLoading: false,
@@ -30,6 +32,7 @@ export const useCrashOutStore = create((set) => ({
     setAngryAt: (angry_at) => set({ angry_at }),
     setTone: (tone) => set({ tone }),
     setFormat: (format) => set({ format }),
+    setSelectedFormat: (selectedFormat) => set({ selectedFormat }),
     setProfanityCheck: (profanity_check) => set({ profanity_check }),
     setKindness: (kindness) => {
       const numeric = Number(kindness);
@@ -41,6 +44,7 @@ export const useCrashOutStore = create((set) => ({
     // Output setters
     setTransformedMessage: (transformedMessage) => set({ transformedMessage }),
     setProfanityDetected: (profanityDetected) => set({ profanityDetected }),
+    setAudioFilePath: (audioFilePath) => set({ audioFilePath }),
 
     // UI state setters
     setLoading: (isLoading) => set({ isLoading }),
@@ -52,11 +56,13 @@ export const useCrashOutStore = create((set) => ({
       angry_at: "",
       tone: "",
       format: "",
+      selectedFormat: "",
       profanity_check: "censored",
       kindness: 3,
       transformedMessage: "",
       profanityDetected: false,
       isLoading: false,
       error: null,
+      ttsFilePath: "",
     }),
   }));

@@ -17,7 +17,10 @@ export const TONES = [
     { label: "Allow Profanity", value: "none" },
 ]
 export const FORMATS = [
-    { label: "Censored", value: "censored" },
-    { label: "Allow Profanity", value: "none" },
+    { label: "Email", value: "email" },
+    { label: "Text Message", value: "text" },
+    { label: "Social Media Post", value: "social_media" },
+    { label: "Review", value: "review" },
+    { label: "Custom", value: "custom" },
 ]
 export const VOICES = []
