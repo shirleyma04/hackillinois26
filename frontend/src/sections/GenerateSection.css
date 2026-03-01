@@ -60,6 +60,35 @@
   box-shadow: none;
 }
 
+/* Error alert box above the Generate button */
+.error-alert {
+  margin: 10px 0 -5px 0;
+  padding: 5px;
+  border-radius: 6px;
+  /* border: 1.5px solid var(--color-accent); */
+  background-color: var(--color-secondary);
+  color: #c64c00;
+  font-weight: bold;
+  text-align: center;
+}
+
+@keyframes flash-onoff {
+  0%,
+  60% {
+    background-color: var(--color-accent);
+    color: var(--color-secondary);
+  }
+  30%,
+  90% {
+    background-color: var(--color-primary);
+    color: var(--color-accent);
+  }
+}
+
+.flash {
+  animation: flash-onoff 1.5s ease-in-out forwards;
+}
+
 .back-button {
   background-color: var(--color-secondary);
   color: var(--color-primary);
