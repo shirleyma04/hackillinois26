@@ -16,7 +16,10 @@
   outline: none;
 }
 
-.btn:focus,
+.btn:focus {
+  outline: none;
+}
+
 .btn:hover {
   outline: none; /* removes default focus ring */
   background-color: var(--color-secondary);
