@@ -1,0 +1,36 @@
+.header2 {
+  margin-top: 0;
+}
+
+.transformed-message {
+  width: 80%; /* 80% of parent */
+  padding: 20px;
+  margin: 20px auto; /* vertical: 20px, horizontal: auto = centered */
+  background: var(--color-quaternary);
+  border-radius: 8px;
+  border: 2.5px solid var(--color-primary);
+  white-space: pre-wrap;
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #000; /* default text color */
+  font-style: normal; /* default font style */
+}
+
+.output-button-group {
+  display: flex;
+  flex-direction: column; /* stack vertically */
+  justify-content: center; /* vertical centering if parent has height */
+  align-items: center; /* horizontal centering */
+  gap: 12px; /* space between rows */
+  margin-top: 5px; /* optional top margin */
+}
+
+.next-steps-button-group {
+  display: flex; /* row of buttons */
+  flex-direction: row; /* ensure horizontal layout */
+  gap: 12px; /* space between buttons */
+  justify-content: center; /* center buttons horizontally */
+  flex-wrap: wrap; /* wrap on small screens */
+}

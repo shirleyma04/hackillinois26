@@ -62,10 +62,11 @@
 
 .format-helper-text {
   width: 80%;
-  margin: 0 auto;
+  margin: -5px auto 0 auto;
   text-align: center;
   color: var(--text-primary);
   opacity: 0.8;
+  font-size: var(--font-size-xs);
 }
 
 /* Error alert box above the Generate button */

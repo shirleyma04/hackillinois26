@@ -83,4 +83,9 @@
   color: var(--text-primary);
   text-align: center;
   white-space: nowrap;
+  margin-top: -2px;
+}
+
+.kindness-inline-item.kindness {
+  font-weight: 600;
 }

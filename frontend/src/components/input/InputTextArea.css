@@ -46,7 +46,7 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  margin-top: 8px;
+  margin-top: 0px;
 }
 
 .recorded-audio-player {
@@ -68,10 +68,16 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  background: transparent;
+  border: none;
+}
+
+.trash-audio-btn:hover {
+  border: 1px solid var(--color-primary);
 }
 
 .trash-icon {
-  font-size: 1rem;
+  font-size: 1.5rem;
   line-height: 1;
 }
 
@@ -92,6 +98,10 @@
   cursor: pointer;
   transition: all 0.2s ease;
   color: var(--color-secondary); /* default text */
+}
+
+.record-btn span {
+  padding: 0;
 }
 
 .compact-record-btn {

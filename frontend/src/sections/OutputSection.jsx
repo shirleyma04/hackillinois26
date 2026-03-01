@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useCrashOutStore } from "../store/useCrashOutStore";
 import KindnessSlider from "../components/flow/KindnessSlider.jsx";
 import Button from "../components/ui/Button.jsx";
+import "./OutputSection.css";
 
 function OutputSection() {
   const API_BASE = import.meta.env.VITE_API_BASE_URL;
@@ -27,6 +28,32 @@ function OutputSection() {
 
     return () => clearInterval(interval);
   }, [loading]);
+
+  const handleMakeChange = async () => {
+    if (!message || !angry_at || !tone || !format) return;
+    setLoading(true);
+    // setTransformedMessage("");
+
+    try {
+      const payload = {
+        message,
+        angry_at,
+        tone,
+        format,
+        kindness_scale: kindness,
+        profanity_check: "censored",
+      };
+
+      const result = await transformService(payload);
+      setTransformedMessage(result.transformed_message);
+      setProfanityDetected(result.profanity_detected);
+    } catch (err) {
+      console.error("Re-transform error:", err);
+      setTransformedMessage("Failed to generate message.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleCopy = async () => {
     if (!transformedMessage) return;
@@ -96,22 +123,8 @@ function OutputSection() {
 
   return (
     <section>
-      <h2>Your Transformed Message</h2>
-      <div
-        style={{
-          padding: "20px",
-          margin: "20px 0",
-          background: "#f5f5f5",
-          borderRadius: "8px",
-          whiteSpace: "pre-wrap",
-          minHeight: "60px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          fontStyle: loading ? "italic" : "normal",
-          color: loading ? "#666" : "#000",
-        }}
-      >
+      <h2 className="header2">Your Transformed Message</h2>
+      <div className="transformed-message">
         {loading
           ? `Generating your message${dots}`
           : transformedMessage || "Your message will appear here."}
@@ -127,17 +140,25 @@ function OutputSection() {
           justifyContent: "center",
         }}
       >
-        <Button onClick={handleSend} disabled={loading || !isEmailSend}>
-          {isEmailSend ? "Send It" : "Send It — Coming Soon 🚀"}
-        </Button>
-        <Button onClick={handleCopy} disabled={loading}>
-          Copy
-        </Button>
-        {ttsFilePath && (
-          <Button onClick={handleDownload} disabled={loading}>
-            Download Voice Message
+        <div className="output-button-group">
+          <Button onClick={handleMakeChange} disabled={loading}>
+            Make the change
           </Button>
-        )}
+
+          <div className="next-steps-button-group">
+            <Button onClick={handleSend} disabled={loading || !isEmailSend}>
+              {isEmailSend ? "Send It" : "Send It (Coming Soon)"}
+            </Button>
+            <Button onClick={handleCopy} disabled={loading}>
+              Copy
+            </Button>
+            {ttsFilePath && (
+              <Button onClick={handleDownload} disabled={loading}>
+                Download Voice Message
+              </Button>
+            )}
+          </div>
+        </div>
       </div>
     </section>
   );

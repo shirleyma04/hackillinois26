@@ -32,7 +32,11 @@ function KindnessSlider({ value, onChange }) {
   return (
     <div className="kindness-slider kindnessSlider">
       <div className="slider-wrap">
-        <span className="emoji-thumb" style={{ left: `${thumbLeft}%` }} aria-hidden="true">
+        <span
+          className="emoji-thumb"
+          style={{ left: `${thumbLeft}%` }}
+          aria-hidden="true"
+        >
           {moodEmoji}
         </span>
         <input
@@ -48,8 +52,11 @@ function KindnessSlider({ value, onChange }) {
       </div>
 
       <div className="kindness-inline-row">
-        <span className="kindness-inline-item">Kindness: {resolvedBucket}/5</span>
         <span className="kindness-inline-item">Make it meaner</span>
+
+        <span className="kindness-inline-item kindness">
+          Kindness: {resolvedBucket}/5
+        </span>
         <span className="kindness-inline-item">Make it nicer</span>
       </div>
     </div>

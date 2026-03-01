@@ -110,12 +110,15 @@ function InputTextArea() {
     };
 
     recognition.onend = () => {
+      // Only stop mediaRecorder if recording is still active
       if (
-        !mediaRecorderRef.current ||
-        mediaRecorderRef.current.state === "inactive"
+        mediaRecorderRef.current &&
+        mediaRecorderRef.current.state !== "inactive"
       ) {
-        setIsSpeaking(false);
+        mediaRecorderRef.current.stop();
       }
+
+      setIsSpeaking(false);
     };
 
     recognitionRef.current = recognition;
@@ -251,17 +254,27 @@ function InputTextArea() {
   };
 
   const stopSpeaking = () => {
+    setIsSpeaking(false);
+
+    // Stop speech recognition
     if (recognitionRef.current) {
-      recognitionRef.current.stop();
+      try {
+        recognitionRef.current.stop();
+      } catch {}
     }
 
+    // Stop media recorder
     if (
       mediaRecorderRef.current &&
       mediaRecorderRef.current.state !== "inactive"
     ) {
       mediaRecorderRef.current.stop();
-    } else {
-      setIsSpeaking(false);
+    }
+
+    // Stop mic stream
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach((track) => track.stop());
+      streamRef.current = null;
     }
   };
 
@@ -334,10 +347,12 @@ function InputTextArea() {
           className={`record-btn compact-record-btn ${isSpeaking ? "recording" : ""}`}
           onClick={toggleSpeaking}
         >
-          <span className="record-emoji" aria-hidden="true">
-            🗣️
+          <span className="record-btn" aria-hidden="true">
+            🎙️
           </span>
-          <span className="record-text">{isSpeaking ? "Stop" : "Speak"}</span>
+          <span className="record-text">
+            {isSpeaking ? "Stop Recording" : "Start Speaking"}
+          </span>
         </Button>
 
         {recordedAudioUrl ? (

@@ -101,7 +101,7 @@ function GenerateSection() {
       return null;
     }
     const label = textFormat === "Custom..." ? "Custom" : textFormat;
-    return `${label} is coming soon 🚀`;
+    return `Feature to send '${label}' is coming soon...`;
   };
 
   const flashError = (msg) => {
@@ -265,7 +265,10 @@ function GenerateSection() {
       {mode === "text" && (
         <div className="generator-container fade-in">
           <h2>Generate A Text Message</h2>
-          <h3>Message Format</h3>
+          <h3>What should the message format be?</h3>
+          {getFormatComingSoonMessage() ? (
+            <p className="format-helper-text">{getFormatComingSoonMessage()}</p>
+          ) : null}
           <Dropdown
             label={textFormat}
             options={[
@@ -277,9 +280,7 @@ function GenerateSection() {
             ]}
             onSelect={handleTextFormatSelect}
           />
-          {getFormatComingSoonMessage() ? (
-            <p className="format-helper-text">{getFormatComingSoonMessage()}</p>
-          ) : null}
+
           {textFormat === "Custom..." && (
             <input
               className="custom-input"
@@ -289,7 +290,7 @@ function GenerateSection() {
               onChange={(e) => setCustomTextFormat(e.target.value)}
             />
           )}
-          <h3>Message Tone</h3>
+          <h3>What should the message tone be?</h3>
           <Dropdown
             label={toneLabel}
             options={[
@@ -328,7 +329,7 @@ function GenerateSection() {
       {mode === "voice" && (
         <div className="generator-container fade-in">
           <h2>Generate A Voice Message</h2>
-          <h3>Message Format</h3>
+          <h3>What should the message format be?</h3>
           <Dropdown
             label={voiceFormat}
             options={[
@@ -350,7 +351,7 @@ function GenerateSection() {
               onChange={(e) => setCustomVoiceFormat(e.target.value)}
             />
           )}
-          <h3>Voice</h3>
+          <h3>What should the voice be?</h3>
           <Dropdown
             label={voice}
             options={[
