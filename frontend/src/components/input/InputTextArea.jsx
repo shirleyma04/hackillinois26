@@ -4,8 +4,6 @@ import Button from "../ui/Button.jsx";
 import "./InputTextArea.css";
 
 function InputTextArea() {
-  const API_BASE = import.meta.env.VITE_API_BASE_URL;
-
   const message = useCrashOutStore((state) => state.message);
   const setMessage = useCrashOutStore((state) => state.setMessage);
 
@@ -25,10 +23,7 @@ function InputTextArea() {
   const textareaRef = useRef(null);
 
   const getPreferredMimeType = () => {
-    if (
-      typeof MediaRecorder === "undefined" ||
-      !MediaRecorder.isTypeSupported
-    ) {
+    if (typeof MediaRecorder === "undefined" || !MediaRecorder.isTypeSupported) {
       return "";
     }
 
@@ -38,9 +33,7 @@ function InputTextArea() {
       "audio/mp4",
     ];
 
-    return (
-      preferredTypes.find((type) => MediaRecorder.isTypeSupported(type)) || ""
-    );
+    return preferredTypes.find((type) => MediaRecorder.isTypeSupported(type)) || "";
   };
 
   const buildMergedAudio = () => {
@@ -49,8 +42,7 @@ function InputTextArea() {
       return;
     }
 
-    const mergedType =
-      segments[0]?.type || audioMimeTypeRef.current || "audio/webm";
+    const mergedType = segments[0]?.type || audioMimeTypeRef.current || "audio/webm";
     const mergedBlob = new Blob(segments, { type: mergedType });
 
     setRecordedAudioUrl((previousUrl) => {
@@ -94,9 +86,7 @@ function InputTextArea() {
         }
       }
 
-      const baseline = baseMessageRef.current
-        ? `${baseMessageRef.current} `
-        : "";
+      const baseline = baseMessageRef.current ? `${baseMessageRef.current} ` : "";
       const mergedMessage = `${baseline}${finalTranscript}${interimTranscript}`
         .replace(/\s+/g, " ")
         .trim();
@@ -155,10 +145,7 @@ function InputTextArea() {
         recognitionRef.current.stop();
       }
 
-      if (
-        mediaRecorderRef.current &&
-        mediaRecorderRef.current.state !== "inactive"
-      ) {
+      if (mediaRecorderRef.current && mediaRecorderRef.current.state !== "inactive") {
         mediaRecorderRef.current.stop();
       }
 
@@ -183,8 +170,7 @@ function InputTextArea() {
         ? new MediaRecorder(stream, { mimeType: preferredMimeType })
         : new MediaRecorder(stream);
 
-      audioMimeTypeRef.current =
-        preferredMimeType || mediaRecorder.mimeType || "audio/webm";
+      audioMimeTypeRef.current = preferredMimeType || mediaRecorder.mimeType || "audio/webm";
       streamRef.current = stream;
       currentChunksRef.current = [];
 
@@ -193,7 +179,7 @@ function InputTextArea() {
           currentChunksRef.current.push(event.data);
         }
       };
-
+      
       mediaRecorder.onstop = async () => {
         if (currentChunksRef.current.length > 0) {
           const segmentType =
@@ -237,7 +223,7 @@ function InputTextArea() {
         }
 
         setIsSpeaking(false);
-      };
+      };        
 
       mediaRecorderRef.current = mediaRecorder;
       mediaRecorder.start();
@@ -302,7 +288,7 @@ function InputTextArea() {
     formData.append("files", audioFile); // must match backend field name
 
     try {
-      const response = await fetch(`${API_BASE}/voices/clone`, {
+      const response = await fetch("http://127.0.0.1:8000/voices/clone", {
         method: "POST",
         body: formData,
       });
@@ -376,9 +362,7 @@ function InputTextArea() {
             aria-label="Remove audio"
             title="Remove audio"
           >
-            <span className="trash-icon" aria-hidden="true">
-              🗑
-            </span>
+            <span className="trash-icon" aria-hidden="true">🗑</span>
           </Button>
         ) : (
           <div className="trash-placeholder" aria-hidden="true"></div>

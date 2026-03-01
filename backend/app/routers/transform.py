@@ -20,7 +20,9 @@ async def transform_message(request: TransformRequest):
             format=request.format,
             tone=request.tone,
             kindness_scale=request.kindness_scale,
-            profanity_check=request.profanity_check
+            profanity_check=request.profanity_check,
+            voice_format=request.voice_format,
+            voice_personality=request.voice_personality
         )
 
         return TransformResponse(

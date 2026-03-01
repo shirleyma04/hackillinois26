@@ -67,7 +67,7 @@
   color: var(--color-secondary);
   border: 3px solid var(--color-tertiary);
   border-radius: var(--radius-md);
-  min-width: 170px; /* smaller tha3n before */
+  min-width: 170px; /* smaller than before */
   max-width: 260px; /* menu width */
   z-index: 10;
   margin-top: 4px;
