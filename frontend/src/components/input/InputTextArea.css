@@ -38,23 +38,39 @@
   display: flex;
   justify-content: flex-end; /* left-align the button relative to textbox */
 }
-
+/* ================================
+   BUTTON AND ICON STYLING
+================================= */
+/* Base button and text colors */
 .record-btn {
   display: flex;
   align-items: center;
-  gap: 8px; /* space between icon and text */
+  gap: 9px;
   padding: 8px 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: var(--color-secondary); /* default text */
+}
+
+/* Recording state overrides */
+.record-btn.recording {
+  color: var(--color-primary);
+}
+
+/* Hover effect for non-recording buttons */
+.record-btn:not(.recording):hover {
+  color: var(--color-primary);
 }
 
 /* Icon container */
 .record-icon {
   width: 16px;
   height: 16px;
-  display: inline-block;
   position: relative;
+  transition: all 0.2s ease;
 }
 
-/* Triangle play icon */
+/* Play icon */
 .record-icon.play::before {
   content: "";
   position: absolute;
@@ -62,12 +78,13 @@
   left: 0;
   width: 0;
   height: 0;
-  border-left: 16px solid var(--color-primary);
+  border-left: 16px solid var(--color-secondary);
   border-top: 8px solid transparent;
   border-bottom: 8px solid transparent;
+  transition: border-color 0.2s ease;
 }
 
-/* Pause icon (2 vertical bars) */
+/* Pause icon */
 .record-icon.pause::before,
 .record-icon.pause::after {
   content: "";
@@ -75,17 +92,33 @@
   top: 0;
   width: 6px;
   height: 16px;
-  background-color: var(--color-primary);
+  background-color: var(--color-secondary);
+  transition: background-color 0.2s ease;
 }
 
 .record-icon.pause::before {
   left: 0;
 }
-
 .record-icon.pause::after {
   right: 0;
 }
 
-.record-text {
-  font-size: 1rem;
+/* State-based icon colors */
+.record-btn.recording .record-icon.play::before {
+  border-left-color: var(--color-primary);
+}
+
+.record-btn.recording .record-icon.pause::before,
+.record-btn.recording .record-icon.pause::after {
+  background-color: var(--color-primary);
+}
+
+/* Hover-based icon colors for non-recording buttons */
+.record-btn:not(.recording):hover .record-icon.play::before {
+  border-left-color: var(--color-primary);
+}
+
+.record-btn:not(.recording):hover .record-icon.pause::before,
+.record-btn:not(.recording):hover .record-icon.pause::after {
+  background-color: var(--color-primary);
 }

@@ -16,19 +16,11 @@
   outline: none;
 }
 
-/* Remove Firefox inner border */
-.btn::-moz-focus-inner {
-  border: 0;
-  padding: 0;
-}
-
-/* Hover / Active / Focus */
-.btn:hover,
-.btn:active,
-.btn:focus {
-  background-color: var(--color-secondary) !important;
-  color: var(--color-primary) !important;
-  box-shadow: none !important;
+.btn:focus,
+.btn:hover {
+  outline: none; /* removes default focus ring */
+  background-color: var(--color-secondary);
+  color: var(--color-primary);
   border: 2.5px solid var(--color-primary);
 }
 
@@ -36,12 +28,4 @@
 .btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
-}
-
-.btn--match-dropdown {
-  width: 150px;
-  padding: 8px 12px;
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
 }

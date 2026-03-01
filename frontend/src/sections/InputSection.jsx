@@ -8,7 +8,7 @@ function InputSection() {
 
   return (
     <section>
-      <h2>Who is making you crash out?</h2>
+      <h2 className="input-text">Who is making you crash out?</h2>
       <div className="button-group">
         {["Family", "Friend", "Partner", "Coworker/Classmate", "Stranger"].map(
           (person) => (
@@ -19,7 +19,7 @@ function InputSection() {
         )}
       </div>
 
-      <h2>Why are you crashing out?</h2>
+      <h2 className="input-text">Why are you crashing out?</h2>
       <InputTextArea />
     </section>
   );

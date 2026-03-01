@@ -29,10 +29,7 @@ function GenerateSection() {
       {/* Text message generator */}
       {mode === "text" && (
         <div className="generator-container fade-in">
-          <Button className="back-button" onClick={handleBack}>
-            ← Back
-          </Button>
-          <h2>Generate a Text Message</h2>
+          <h2>Generate A Text Message!</h2>
           <h3>What should the message format be?</h3>
           <Dropdown
             label={textFormat}
@@ -58,17 +55,17 @@ function GenerateSection() {
             ]}
             onSelect={setTone}
           />
-          <Button>Generate!</Button>
+          <div className="second-choice-buttons">
+            <Button onClick={handleBack}>← Back to selection</Button>
+            <Button>Generate!</Button>
+          </div>
         </div>
       )}
 
       {/* Voice message generator */}
       {mode === "voice" && (
         <div className="generator-container fade-in">
-          <Button className="back-button" onClick={handleBack}>
-            ← Back
-          </Button>
-          <h2>Generate a Voice Message</h2>
+          <h2>Generate A Voice Message!</h2>
           <h3>What should the message format be?</h3>
           <Dropdown
             label={voiceFormat}
@@ -95,7 +92,10 @@ function GenerateSection() {
             ]}
             onSelect={setVoice}
           />
-          <Button>Generate!</Button>
+          <div className="second-choice-buttons">
+            <Button onClick={handleBack}>← Back to selection</Button>
+            <Button>Generate!</Button>
+          </div>
         </div>
       )}
     </section>

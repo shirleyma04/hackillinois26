@@ -91,12 +91,15 @@ function InputTextArea() {
       />
 
       <div className="speaking-button-wrapper">
-        <Button onClick={toggleListening} className="record-btn">
+        <Button
+          className={`record-btn ${listening ? "recording" : ""}`}
+          onClick={toggleListening}
+        >
           <span
             className={`record-icon ${listening ? "pause" : "play"}`}
           ></span>
           <span className="record-text">
-            {listening ? "Stop Recording" : "Say Your Message"}
+            {listening ? "Stop recording" : "Say your message..."}
           </span>
         </Button>
       </div>
