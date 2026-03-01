@@ -10,6 +10,8 @@ export const useCrashOutStore = create((set) => ({
     profanity_check: "censored",
     kindness: 3,
     kindnessRaw: 3,
+    voice_format: "",
+    voice_personality: "",
 
     // Output
     transformedMessage: "",
@@ -24,6 +26,22 @@ export const useCrashOutStore = create((set) => ({
     ttsFilePath: "",                  // <- new state
     setTtsFilePath: (ttsFilePath) => set({ ttsFilePath }), // <- setter
 
+    // Add audio reference for controlling playback
+    currentAudio: null,
+    setCurrentAudio: (audio) => set({ currentAudio: audio }),
+    stopAudio: () => set((state) => {
+      if (state.currentAudio) {
+        state.currentAudio.pause();
+        state.currentAudio.currentTime = 0;
+      }
+      return { currentAudio: null };
+    }),
+
+    // Track last generation parameters to detect changes
+    lastGenerationParams: null,
+    setLastGenerationParams: (params) => set({ lastGenerationParams: params }),
+    clearLastGenerationParams: () => set({ lastGenerationParams: null }),
+
     // Input setters
     setMessage: (message) => set({ message }),
     setAngryAt: (angry_at) => set({ angry_at }),
@@ -37,6 +55,8 @@ export const useCrashOutStore = create((set) => ({
       const rounded = Math.round(raw);
       set({ kindness: rounded, kindnessRaw: raw });
     },
+    setVoiceFormat: (voice_format) => set({ voice_format }),
+    setVoicePersonality: (voice_personality) => set({ voice_personality }),
 
     // Output setters
     setTransformedMessage: (transformedMessage) => set({ transformedMessage }),
@@ -56,6 +76,8 @@ export const useCrashOutStore = create((set) => ({
       selectedFormat: "",
       profanity_check: "censored",
       kindness: 3,
+      voice_format: "",
+      voice_personality: "",
       transformedMessage: "",
       profanityDetected: false,
       isLoading: false,

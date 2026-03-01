@@ -1,5 +1,6 @@
 # SHARED - Main FastAPI application
 
+import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.routers import transform, tts, voices, music
@@ -19,9 +20,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Serve built frontend
-frontend_path = os.path.join(os.path.dirname(__file__), "static")
-app.mount("/", StaticFiles(directory=frontend_path, html=True), name="frontend")
+# Serve built frontend (commented out - only needed for production)
+# frontend_path = os.path.join(os.path.dirname(__file__), "static")
+# app.mount("/", StaticFiles(directory=frontend_path, html=True), name="frontend")
 
 
 # TEXT backend

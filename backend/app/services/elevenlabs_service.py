@@ -138,6 +138,7 @@ def design_voice(
     Generate voice previews from a text prompt.
     """
     try:
+        print(f"[DEBUG] design_voice called with: description={voice_description[:50]}..., text={text[:50]}..., model={model_id}")
         result = elevenlabs.text_to_voice.design(
             model_id=model_id,
             voice_description=voice_description,
@@ -152,9 +153,13 @@ def design_voice(
             for preview in result.previews
         ]
 
+        print(f"[DEBUG] Generated {len(previews)} voice previews")
         return {"previews": previews}
 
     except Exception as e:
+        print(f"[ERROR] Voice design exception: {type(e).__name__}: {str(e)}")
+        import traceback
+        traceback.print_exc()
         raise Exception(f"Voice design failed: {str(e)}")
 
 
