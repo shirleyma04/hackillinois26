@@ -52,7 +52,7 @@ function GenerateSection() {
   );
 
   const buildRapPrompt = ({ angryAt, message }) => {
-      return `
+    return `
     Create a high-energy hip-hop rap track with aggressive trap drums beats, heavy 808 bass, and a fast tempo.
 
     Vocal style:
@@ -69,7 +69,7 @@ function GenerateSection() {
     - Clean but intense attitude
     - Dramatic ending beat drop
     `;
-    };
+  };
 
   const handleBack = () => {
     setMode(null);
@@ -233,11 +233,12 @@ function GenerateSection() {
     // setTransformedMessage("");
     try {
       const mappedVoiceFormat =
-      voiceFormat === "Custom..."
-        ? customVoiceFormat
-        : mapVoiceFormat(voiceFormat);
-      
-      const isRapMusic = mode === "voice" && mapVoiceFormat(voiceFormat) === "rap";
+        voiceFormat === "Custom..."
+          ? customVoiceFormat
+          : mapVoiceFormat(voiceFormat);
+
+      const isRapMusic =
+        mode === "voice" && mapVoiceFormat(voiceFormat) === "rap";
 
       // 🎤 RAP MUSIC MODE
       if (mappedVoiceFormat === "rap") {
@@ -249,7 +250,7 @@ function GenerateSection() {
 
           console.log(rapPrompt);
 
-          const response = await fetch("http://127.0.0.1:8000/music/generate", {
+          const response = await fetch(`${API_BASE}/music/generate`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -266,7 +267,7 @@ function GenerateSection() {
 
           setTtsFilePath(data.file_path);
 
-          const audioUrl = `http://127.0.0.1:8000/${data.file_path}`;
+          const audioUrl = `${API_BASE}/${data.file_path}`;
           const audio = new Audio(audioUrl);
           setCurrentAudio(audio);
           audio.play();
@@ -327,18 +328,15 @@ function GenerateSection() {
               textForVoiceDesign = `${textForVoiceDesign} This is a sample demonstration message created for the purpose of voice generation and preview.`;
             }
 
-            const designResponse = await fetch(
-              "http://127.0.0.1:8000/voices/design",
-              {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                  voice_description: customVoice,
-                  text: textForVoiceDesign,
-                  model_id: "eleven_multilingual_ttv_v2",
-                }),
-              },
-            );
+            const designResponse = await fetch(`${API_BASE}/voices/design`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                voice_description: customVoice,
+                text: textForVoiceDesign,
+                model_id: "eleven_multilingual_ttv_v2",
+              }),
+            });
 
             if (!designResponse.ok) {
               throw new Error("Voice design failed");
@@ -356,7 +354,7 @@ function GenerateSection() {
               ];
 
             const createResponse = await fetch(
-              "http://127.0.0.1:8000/voices/design/create",
+              `${API_BASE}/voices/design/create`,
               {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -402,7 +400,7 @@ function GenerateSection() {
         setCachedVoiceId(selectedVoiceId);
       }
 
-      const ttsResponse = await fetch("http://127.0.0.1:8000/tts/", {
+      const ttsResponse = await fetch(`${API_BASE}/tts/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
